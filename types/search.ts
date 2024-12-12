@@ -25,6 +25,7 @@ export interface YouTubeVideo {
   thumbnail: string;
   url: string;
   channelTitle: string;
+  channelUrl: string;
   publishedAt: string;
 }
 
