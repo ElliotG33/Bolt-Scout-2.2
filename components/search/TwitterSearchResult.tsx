@@ -3,18 +3,28 @@ import { motion } from 'framer-motion';
 import { formatDistanceToNow } from 'date-fns';
 import { TabsContent } from '@radix-ui/react-tabs';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
-import { ExternalLink } from 'lucide-react';
 
-interface YoutubeSearchResultProps {
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import {
+  ArrowUpFromLine,
+  ExternalLink,
+  Heart,
+  MessageCircleReply,
+  MessageSquare,
+  Repeat2,
+} from 'lucide-react';
+
+interface TwitterSearchResultProps {
   data: any;
 }
 
-export default function YoutubeSearchResult({
+export default function TwitterSearchResult({
   data,
-}: YoutubeSearchResultProps) {
+}: TwitterSearchResultProps) {
+  console.log('===data', data.length, data);
+
   return (
-    <TabsContent value='youtube' className='space-y-4'>
+    <TabsContent value='twitter' className='space-y-4'>
       {data.length > 0 ? (
         data.map((post: any, index: number) => (
           <motion.div
@@ -25,25 +35,14 @@ export default function YoutubeSearchResult({
           >
             <Card>
               <CardHeader>
-                <CardTitle className='text-lg font-medium'>
+                <div className='flex items-center gap-4 text-sm'>
                   <a
-                    href={post.url}
+                    href={post.userUrl}
                     target='_blank'
                     rel='noopener noreferrer'
                     className='hover:text-primary flex items-center gap-2'
                   >
-                    {post.title}
-                    <ExternalLink className='h-4 w-4' />
-                  </a>
-                </CardTitle>
-                <div className='flex items-center gap-4 text-sm text-muted-foreground'>
-                  <a
-                    href={post.channelUrl}
-                    target='_blank'
-                    rel='noopener noreferrer'
-                    className='hover:text-primary flex items-center gap-2'
-                  >
-                    {post.channelTitle}
+                    @{post.username}
                     <ExternalLink className='h-4 w-4' />
                   </a>
                   <span>•</span>
@@ -53,23 +52,33 @@ export default function YoutubeSearchResult({
                 </div>
               </CardHeader>
               <CardContent>
-                <div className='flex items-center gap-4'>
-                  <Image
-                    src={post.thumbnail}
-                    alt='Youtube Thumbnail'
-                    width={120}
-                    height={90}
-                  />
-                  <p className='text-muted-foreground line-clamp-3 mb-4'>
-                    {post.description}
-                  </p>
-                </div>
-                <div className='flex items-center justify-end'>
+                <p className='text-muted-foreground line-clamp-3 mb-4'>
+                  {post.text}
+                </p>
+                <div className='flex items-center justify-between'>
+                  <div className='flex items-center gap-4 text-sm'>
+                    <div className='flex items-center gap-1'>
+                      <Heart className='h-4 w-4' />
+                      <span>{post.like_count}</span>
+                    </div>
+                    <div className='flex items-center gap-1'>
+                      <MessageCircleReply className='h-4 w-4' />
+                      <span>{post.reply_count} Reply</span>
+                    </div>
+                    <div className='flex items-center gap-1'>
+                      <Repeat2 className='h-4 w-4' />
+                      <span>{post.retweet_count} Repost</span>
+                    </div>
+                  </div>
                   <Button
                     variant='outline'
                     size='sm'
                     onClick={() =>
-                      window.open(post.url, '_blank', 'noopener,noreferrer')
+                      window.open(
+                        post.tweetUrl,
+                        '_blank',
+                        'noopener,noreferrer'
+                      )
                     }
                     className='gap-2'
                   >

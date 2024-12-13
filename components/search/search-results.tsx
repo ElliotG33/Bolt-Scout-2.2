@@ -21,6 +21,7 @@ import { motion } from 'framer-motion';
 import { formatDistanceToNow } from 'date-fns';
 import { Button } from '@/components/ui/button';
 import YoutubeSearchResult from './YoutubeSearchResult';
+import TwitterSearchResult from './TwitterSearchResult';
 
 interface SearchResultsProps {
   reddit: RedditPost[];
@@ -133,11 +134,7 @@ export function SearchResults({
           </p>
         </TabsContent>
 
-        <TabsContent value='twitter' className='space-y-4'>
-          <p className='text-muted-foreground text-center py-8'>
-            Twitter search coming soon...
-          </p>
-        </TabsContent>
+        <TwitterSearchResult data={twitter} />
       </Tabs>
     </motion.div>
   );

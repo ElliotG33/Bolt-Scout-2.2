@@ -5,12 +5,12 @@ import { SearchForm } from '@/components/search/search-form';
 import { SearchResults } from '@/components/search/search-results';
 import { searchReddit } from '@/lib/reddit';
 import { searchYouTube } from '@/lib/youtube';
+import { searchTwitter } from '@/lib/twitter';
 import { toast } from 'sonner';
 import {
   SearchParams,
   SearchResults as SearchResultsType,
 } from '@/types/search';
-import { searchTwitter } from '@/lib/twitter';
 
 export default function SearchPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -24,30 +24,37 @@ export default function SearchPage() {
   const handleSearch = async (params: SearchParams) => {
     setIsLoading(true);
     try {
+      const { timeFrame, resultCount } = params;
       const primaryQuery = params.keywords.join(' OR ');
       const secondaryQuery =
         params.secondaryKeywords.length > 0
           ? ` AND (${params.secondaryKeywords.join(' OR ')})`
           : '';
       const query = primaryQuery + secondaryQuery;
+      let twitterQuery = `"${primaryQuery}"`;
+      if (params.secondaryKeywords.length > 0) {
+        twitterQuery += ` "${params.secondaryKeywords.join(' OR ')}"`;
+      }
 
-      const { timeFrame, resultCount } = params;
-
-      const [redditResults, youtubeResults] =
+      const [redditResults, youtubeResults, twitterResults] =
         await Promise.allSettled([
           searchReddit({ query, timeFrame, limit: resultCount }),
-          searchYouTube({ query, timeFrame, limit: resultCount })
+          searchYouTube({ query, timeFrame, limit: resultCount }),
+          searchTwitter({ query: twitterQuery, timeFrame, limit: resultCount }),
         ]);
 
       const redditData =
         redditResults.status === 'fulfilled' ? redditResults.value : [];
       const youtubeData =
         youtubeResults.status === 'fulfilled' ? youtubeResults.value : [];
+      const twitterData =
+        twitterResults.status === 'fulfilled' ? twitterResults.value : [];
 
       setResults({
         ...results,
         reddit: redditData,
         youtube: youtubeData,
+        twitter: twitterData,
       });
 
       if (redditData.length === 0 && youtubeData.length === 0) {
