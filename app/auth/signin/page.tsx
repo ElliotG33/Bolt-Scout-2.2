@@ -16,8 +16,8 @@ export default function SigninPage() {
   const router = useRouter();
 
   const [user, setUser] = React.useState({
-    email: 'idoweb9@gmail.com',
-    password: '11111',
+    email: '',
+    password: '',
   });
   const [buttonDisabled, setButtonDisabled] = React.useState(true);
   const [processing, setProcessing] = React.useState(false);
