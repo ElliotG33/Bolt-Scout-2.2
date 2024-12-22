@@ -57,7 +57,11 @@ export default function SearchPage() {
         twitter: twitterData,
       });
 
-      if (redditData.length === 0 && youtubeData.length === 0) {
+      if (
+        redditData.length === 0 &&
+        youtubeData.length === 0 &&
+        twitterData.length === 0
+      ) {
         toast.info('No results found. Try adjusting your search terms.');
       } else {
         const total = redditData.length + youtubeData.length;
