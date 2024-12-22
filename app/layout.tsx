@@ -1,6 +1,7 @@
 import './globals.css';
 import { Inter, Lexend } from 'next/font/google';
 import { cookies } from 'next/headers';
+import { NextAuthProvider } from './providers';
 
 import { ThemeProvider } from '@/components/theme-provider';
 import { Header } from '@/components/header';
@@ -29,17 +30,19 @@ export default function RootLayout({
   return (
     <html lang='en' suppressHydrationWarning>
       <body className={`${inter.variable} ${lexend.variable} font-sans`}>
-        <ThemeProvider
-          attribute='class'
-          defaultTheme='system'
-          enableSystem
-          disableTransitionOnChange
-        >
-          <Header isLoggedIn={isLoggedIn} />
-          <main>{children}</main>
-          <Footer />
-          <Toaster />
-        </ThemeProvider>
+        <NextAuthProvider>
+          <ThemeProvider
+            attribute='class'
+            defaultTheme='system'
+            enableSystem
+            disableTransitionOnChange
+          >
+            <Header isLoggedIn={isLoggedIn} />
+            <main>{children}</main>
+            <Footer />
+            <Toaster />
+          </ThemeProvider>
+        </NextAuthProvider>
       </body>
     </html>
   );

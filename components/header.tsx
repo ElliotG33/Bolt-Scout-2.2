@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import Link from 'next/link';
+import { useSession, signOut } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
 
 import { ModeToggle } from '@/components/mode-toggle';
@@ -10,7 +11,6 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Menu } from 'lucide-react';
 import { isAuthPage } from '@/lib/utils/auth';
 import axios from 'axios';
-import router from 'next/router';
 import { toast } from '@/hooks/use-toast';
 
 const navigation = [
@@ -25,6 +25,8 @@ interface HeaderProps {
 }
 
 export function Header({ isLoggedIn }: HeaderProps) {
+  const { data: session } = useSession();
+  const isUserLoggedIn = isLoggedIn || session;
   const pathname = usePathname();
   if (isAuthPage(pathname)) return <></>;
 
@@ -38,15 +40,19 @@ export function Header({ isLoggedIn }: HeaderProps) {
   const logout = async () => {
     try {
       await axios.get('/api/users/signout');
-      // toast.success('Logout successful');
       toast({
         title: 'Signout Successful',
-        variant: 'destructive',
+        variant: 'default',
       });
-      window.location.href = '/';
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 1000);
     } catch (error: any) {
       console.log(error.message);
-      // toast.error(error.message);
+      toast({
+        title: error.message,
+        variant: 'destructive',
+      });
     }
   };
 
@@ -77,8 +83,8 @@ export function Header({ isLoggedIn }: HeaderProps) {
           <div className='hidden md:flex items-center space-x-4'>
             <ModeToggle />
             <Button variant='ghost' asChild>
-              {isLoggedIn ? (
-                <Link href='#' onClick={logout}>
+              {isUserLoggedIn ? (
+                <Link href='#' onClick={() => (session ? signOut() : logout())}>
                   Sign Out
                 </Link>
               ) : (

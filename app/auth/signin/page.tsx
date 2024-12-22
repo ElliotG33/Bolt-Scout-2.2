@@ -2,6 +2,8 @@
 
 import Link from 'next/link';
 import React, { useEffect } from 'react';
+import Image from 'next/image';
+import { signIn } from 'next-auth/react';
 import axios from 'axios';
 
 import { useRouter } from 'next/navigation';
@@ -54,6 +56,25 @@ export default function SigninPage() {
       <CardContent className='pt-12 pb-12 space-y-12 rounded-lg shadow-lg w-full max-w-md border bg-card text-card-foreground'>
         <h1 className='text-3xl font-bold text-center mb-6'>Sign in</h1>
 
+        <Button
+          onClick={() => signIn('google')}
+          variant='outline'
+          className='gap-4 w-full flex items-center'
+          size='lg'
+        >
+          Sign in with Google
+          <Image
+            src='/images/icons/google.svg'
+            alt='Google'
+            width={24}
+            height={24}
+          />
+        </Button>
+
+        <div className='text-center text-lg'>
+          <p>OR</p>
+        </div>
+
         <div className='space-y-4'>
           <Label htmlFor='email'>Email Address</Label>
           <Input
@@ -99,7 +120,7 @@ export default function SigninPage() {
 
         <Link href='/auth/signup'>
           <p className='text-center mt-4 text-sm hover:underline'>
-            Don't have an account? Sign Up
+            Don&apos;t have an account? Sign Up
           </p>
         </Link>
       </CardContent>
