@@ -87,7 +87,9 @@ export default function SearchPage() {
         </p>
       </div>
       <SearchForm onSubmit={handleSearch} isLoading={isLoading} />
-      {(results.reddit.length > 0 || results.youtube.length > 0) && (
+      {(results.reddit.length > 0 ||
+        results.youtube.length > 0 ||
+        results.twitter.length > 0) && (
         <div className='mt-8'>
           <SearchResults {...results} />
         </div>

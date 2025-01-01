@@ -24,6 +24,7 @@ import YoutubeSearchResult from './YoutubeSearchResult';
 import TwitterSearchResult from './TwitterSearchResult';
 
 interface SearchResultsProps {
+  title?: React.ReactNode;
   reddit: RedditPost[];
   youtube: YouTubeVideo[];
   quora: QuoraPost[];
@@ -35,6 +36,7 @@ export function SearchResults({
   youtube,
   quora,
   twitter,
+  title,
 }: SearchResultsProps) {
   return (
     <motion.div
@@ -43,7 +45,7 @@ export function SearchResults({
       className='space-y-4'
     >
       <h2 className='font-lexend text-2xl font-semibold mb-4'>
-        Search Results
+        {title || 'Search Results'}
       </h2>
 
       <Tabs defaultValue='reddit' className='space-y-4'>

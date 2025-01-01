@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import axios from 'axios';
 import Link from 'next/link';
 
@@ -11,8 +11,13 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { isValidEmail } from '@/lib/utils/auth';
 import { toast } from '@/hooks/use-toast';
+import { useSession } from 'next-auth/react';
 
 export default function ForgetPasswordPage() {
+  const { data: session } = useSession();
+  if (session) {
+    redirect('/');
+  }
   const [email, setEmail] = useState<string>('');
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const router = useRouter();

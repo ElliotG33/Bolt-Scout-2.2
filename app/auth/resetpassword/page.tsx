@@ -5,11 +5,16 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import axios from 'axios';
-import { useRouter } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from '@/hooks/use-toast';
+import { useSession } from 'next-auth/react';
 
 export default function ResetPasswordPage() {
+  const { data: session } = useSession();
+  if (session) {
+    redirect('/');
+  }
   const router = useRouter();
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [password, setPassword] = useState('');
