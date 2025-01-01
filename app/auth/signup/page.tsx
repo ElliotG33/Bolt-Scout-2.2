@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import React, { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 
 import axios from 'axios';
 
@@ -11,8 +11,14 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/hooks/use-toast';
+import { useSession } from 'next-auth/react';
 
 export default function SignupPage() {
+  const { data: session } = useSession();
+  if (session) {
+    redirect('/');
+  }
+
   const router = useRouter();
 
   const [user, setUser] = React.useState({

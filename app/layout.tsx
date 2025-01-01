@@ -1,7 +1,6 @@
 import './globals.css';
 import { Inter, Lexend } from 'next/font/google';
-import { cookies } from 'next/headers';
-import { NextAuthProvider } from './providers';
+import AuthProvider from '@/providers/AuthProvider';
 
 import { ThemeProvider } from '@/components/theme-provider';
 import { Header } from '@/components/header';
@@ -23,26 +22,24 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const cookieStore = cookies();
-  const token = cookieStore.get('token')?.value.trim();
-  const isLoggedIn = !!token;
-
   return (
     <html lang='en' suppressHydrationWarning>
-      <body className={`${inter.variable} ${lexend.variable} font-sans`}>
-        <NextAuthProvider>
+      <body
+        className={`${inter.variable} ${lexend.variable} font-sans`}
+      >
+        <AuthProvider>
           <ThemeProvider
             attribute='class'
             defaultTheme='system'
             enableSystem
             disableTransitionOnChange
           >
-            <Header isLoggedIn={isLoggedIn} />
+            <Header />
             <main>{children}</main>
             <Footer />
             <Toaster />
           </ThemeProvider>
-        </NextAuthProvider>
+        </AuthProvider>
       </body>
     </html>
   );

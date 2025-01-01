@@ -1,9 +1,18 @@
-import { strict } from 'assert';
-import { verify } from 'crypto';
-import { type } from 'os';
+import mongoose, { Schema, Document, Model } from 'mongoose';
+export interface IUser extends Document {
+  _id: mongoose.Types.ObjectId;
+  name: string;
+  email: string;
+  password: string;
+  isVerified: boolean;
+  isAdmin: boolean;
+  forgotPasswordToken: string;
+  forgotPasswordTokenExpiry: string;
+  verifyToken: string;
+  verifyTokenExpiry: Date;
+}
 
-const { Mongoose, default: mongoose } = require('mongoose');
-const userSchema = new mongoose.Schema({
+const UserSchema = new Schema<IUser>({
   name: {
     type: String,
     required: [true, 'Please provide a name.'],
@@ -30,6 +39,6 @@ const userSchema = new mongoose.Schema({
   verifyTokenExpiry: Date,
 });
 
-const User = mongoose.models.users || mongoose.model('users', userSchema);
-
+const User: Model<IUser> =
+  mongoose.models.User || mongoose.model<IUser>('User', UserSchema);
 export default User;

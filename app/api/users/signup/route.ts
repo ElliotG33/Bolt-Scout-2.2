@@ -1,17 +1,15 @@
-import { connect } from '@/dbConfig/dbConfig';
-import User from '@/models/userModel';
-import { log } from 'console';
 import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
-import { sendMail } from '@/helpers/mailer';
-
-connect();
+import User from '@/models/User';
+import { connectToDatabase } from '@/lib/utils/mongodb';
+// import { sendMail } from '@/helpers/mailer';
 
 export async function POST(request: NextRequest) {
   try {
+    await connectToDatabase();
+
     const reqBody = await request.json();
     const { name, email, password } = reqBody;
-    console.log(reqBody);
 
     const user = await User.findOne({ email });
 

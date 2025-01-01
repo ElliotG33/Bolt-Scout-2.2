@@ -1,9 +1,10 @@
 export interface Alert {
-  id: string
-  email: string
-  keywords: string[]
-  frequency: number
-  active: boolean
-  createdAt: string
-  lastRun?: string
+  _id: string;
+  userEmail?: string;
+  email: string;
+  keywords: string[];
+  frequency: number;
+  active: boolean;
+  createdAt: string;
+  lastRun?: string;
 }

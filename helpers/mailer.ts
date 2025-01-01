@@ -1,16 +1,15 @@
 import nodemailer from 'nodemailer';
 import bcrypt from 'bcryptjs';
 
-import User from '@/models/userModel';
-import { connect } from '@/dbConfig/dbConfig';
-
-connect();
+import User from '@/models/User';
+import { connectToDatabase } from '@/lib/utils/mongodb';
 
 const EMAIL_SERVICE_PROVIDER = process.env.EMAIL_SERVICE_PROVIDER;
 const EMAIL_APP_USER = process.env.EMAIL_APP_USER;
 const EMAIL_APP_PASS = process.env.EMAIL_APP_PASS;
 
 export async function sendMail({ email, emailType, userId, baseUrl }: any) {
+  await connectToDatabase();
   const hashedToken = await bcrypt.hash(userId.toString(), 10);
   const currentTime = new Date();
   const expiryTime = new Date(currentTime.getTime() + 3600000); // 1 hour from now

@@ -8,6 +8,9 @@ const nextConfig = {
   env: {
     NEXT_PUBLIC_YOUTUBE_API_KEY: process.env.YOUTUBE_API_KEY,
   },
+  experimental: {
+    serverActions: true,
+  },
 };
 
 module.exports = nextConfig;

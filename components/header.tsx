@@ -20,15 +20,11 @@ const navigation = [
   { name: 'Alerts', href: '/alerts' },
 ];
 
-interface HeaderProps {
-  isLoggedIn: boolean;
-}
-
-export function Header({ isLoggedIn }: HeaderProps) {
-  const { data: session } = useSession();
-  const isUserLoggedIn = isLoggedIn || session;
+export function Header() {
   const pathname = usePathname();
   if (isAuthPage(pathname)) return <></>;
+
+  const { data: session } = useSession();
 
   const isActive = (href: string) => {
     if (href.startsWith('/#')) {
@@ -83,8 +79,8 @@ export function Header({ isLoggedIn }: HeaderProps) {
           <div className='hidden md:flex items-center space-x-4'>
             <ModeToggle />
             <Button variant='ghost' asChild>
-              {isUserLoggedIn ? (
-                <Link href='#' onClick={() => (session ? signOut() : logout())}>
+              {session ? (
+                <Link href='#' onClick={() => signOut()}>
                   Sign Out
                 </Link>
               ) : (

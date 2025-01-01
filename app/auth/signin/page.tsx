@@ -3,20 +3,23 @@
 import Link from 'next/link';
 import React, { useEffect } from 'react';
 import Image from 'next/image';
-import { signIn } from 'next-auth/react';
-import axios from 'axios';
+import { signIn, useSession } from 'next-auth/react';
 
-import { useRouter } from 'next/navigation';
+import { redirect, useSearchParams } from 'next/navigation';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { isValidEmail } from '@/lib/utils/auth';
-import { toast } from '@/hooks/use-toast';
 
 export default function SigninPage() {
-  const router = useRouter();
+  const { data: session } = useSession();
+  if (session) {
+    redirect('/');
+  }
 
+  const searchParams = useSearchParams();
+  const callBackUrl = searchParams.get('callbackUrl');
   const [user, setUser] = React.useState({
     email: '',
     password: '',
@@ -36,18 +39,17 @@ export default function SigninPage() {
     }
   }, [user]);
 
-  const onSignin = async () => {
-    try {
-      setProcessing(true);
-      const userdata = await axios.post('/api/users/signin', user);
-      window.location.href = '/';
-    } catch (error: any) {
-      toast({
-        title: error.response?.data?.error || 'An error occurred',
-        variant: 'destructive',
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const { email, password } = user;
+
+    if (email && password) {
+      const res = await signIn('credentials', {
+        email: email,
+        password: password,
+        redirect: true,
+        callbackUrl: '/',
       });
-    } finally {
-      setProcessing(false);
     }
   };
 
@@ -75,42 +77,44 @@ export default function SigninPage() {
           <p>OR</p>
         </div>
 
-        <div className='space-y-4'>
-          <Label htmlFor='email'>Email Address</Label>
-          <Input
-            id='email'
-            type='email'
-            value={user.email}
-            onChange={(e) => setUser({ ...user, email: e.target.value })}
-            placeholder='Enter your email address'
-            required
-          />
-        </div>
-        <div className='space-y-4'>
-          <Label htmlFor='password'>Password</Label>
-          <Input
-            id='password'
-            type='password'
-            value={user.password}
-            onChange={(e) => setUser({ ...user, password: e.target.value })}
-            placeholder='Enter your password'
-            required
-          />
-        </div>
+        <form onSubmit={handleSubmit} className='flex flex-col space-y-8'>
+          <div className='space-y-4'>
+            <Label htmlFor='email'>Email Address</Label>
+            <Input
+              id='email'
+              type='email'
+              value={user.email}
+              onChange={(e) => setUser({ ...user, email: e.target.value })}
+              placeholder='Enter your email address'
+              required
+            />
+          </div>
+          <div className='space-y-4'>
+            <Label htmlFor='password'>Password</Label>
+            <Input
+              id='password'
+              type='password'
+              value={user.password}
+              onChange={(e) => setUser({ ...user, password: e.target.value })}
+              placeholder='Enter your password'
+              required
+            />
+          </div>
 
-        <div className='flex'>
-          <Button
-            onClick={onSignin}
-            disabled={buttonDisabled || processing}
-            className={`w-full py-3 px-4 rounded-lg text-white font-semibold tracking-wide focus:outline-none transition-all duration-300 ease-in-out ${
-              buttonDisabled || processing
-                ? 'opacity-50 cursor-not-allowed'
-                : ''
-            }`}
-          >
-            {processing ? 'Signing in...' : 'Sign in'}
-          </Button>
-        </div>
+          <div className='flex'>
+            <Button
+              type='submit'
+              disabled={buttonDisabled || processing}
+              className={`w-full py-3 px-4 rounded-lg text-white font-semibold tracking-wide focus:outline-none transition-all duration-300 ease-in-out ${
+                buttonDisabled || processing
+                  ? 'opacity-50 cursor-not-allowed'
+                  : ''
+              }`}
+            >
+              {processing ? 'Signing in...' : 'Sign in'}
+            </Button>
+          </div>
+        </form>
 
         <Link href='/auth/forgotpassword'>
           <p className='text-center mt-4 text-sm hover:underline'>
