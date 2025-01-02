@@ -1,6 +1,4 @@
 import { TimeFrame, TwitterPost } from '@/types/search';
-import { calculateStartTime } from './utils/search';
-import data from './api/data/twitter.json';
 
 interface SearchTwitterProps {
   query: string;
@@ -8,28 +6,20 @@ interface SearchTwitterProps {
   timeFrame: TimeFrame;
 }
 
-const TWITTER_API_URL = process.env.NEXT_PUBLIC_TWITTER_API_URL;
-
 export async function searchTwitter({
   query,
   timeFrame,
-  limit = 50,
+  limit = 20,
 }: SearchTwitterProps): Promise<TwitterPost[]> {
-  if (!TWITTER_API_URL) {
-    console.error('Twitter endpoint not configured');
-    return [];
-  }
-
   try {
-    const startTime = calculateStartTime('week');//there is limit of a week
     const params = new URLSearchParams({
       query,
-      ...(startTime && { start_time: startTime }),
+      ...(timeFrame && { start_time: timeFrame }),
       max_results: limit.toString(),
     });
 
     //Search tweets based on the query
-    const response = await fetch(`${TWITTER_API_URL}?${params}`);
+    const response = await fetch(`/api/twitter?${params}`);
 
     if (!response.ok) {
       const errorData = await response.json();

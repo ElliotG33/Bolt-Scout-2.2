@@ -1,19 +1,19 @@
-"use client"
+'use client';
 
-import { useState } from 'react'
-import { motion } from 'framer-motion'
-import { Search, Loader2 } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Slider } from '@/components/ui/slider'
-import { Card, CardContent } from '@/components/ui/card'
-import { KeywordList } from '@/components/search/keyword-list'
-import { TimeFrame, SearchParams } from '@/types/search'
+import { useState } from 'react';
+import { motion } from 'framer-motion';
+import { Search, Loader2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Slider } from '@/components/ui/slider';
+import { Card, CardContent } from '@/components/ui/card';
+import { KeywordList } from '@/components/search/keyword-list';
+import { TimeFrame, SearchParams } from '@/types/search';
 
 interface SearchFormProps {
-  onSubmit: (data: SearchParams) => void
-  isLoading: boolean
+  onSubmit: (data: SearchParams) => void;
+  isLoading: boolean;
 }
 
 const timeFrameOptions: { value: TimeFrame; label: string }[] = [
@@ -22,77 +22,83 @@ const timeFrameOptions: { value: TimeFrame; label: string }[] = [
   { value: 'week', label: 'Past Week' },
   { value: 'month', label: 'Past Month' },
   { value: 'year', label: 'Past Year' },
-  { value: 'all', label: 'All Time' }
-]
+  { value: 'all', label: 'All Time' },
+];
 
 export function SearchForm({ onSubmit, isLoading }: SearchFormProps) {
-  const [keywords, setKeywords] = useState<string[]>([])
-  const [secondaryKeywords, setSecondaryKeywords] = useState<string[]>([])
-  const [antiKeywords, setAntiKeywords] = useState<string[]>([])
-  const [currentKeyword, setCurrentKeyword] = useState('')
-  const [currentSecondaryKeyword, setCurrentSecondaryKeyword] = useState('')
-  const [currentAntiKeyword, setCurrentAntiKeyword] = useState('')
-  const [resultCount, setResultCount] = useState([50])
-  const [timeFrame, setTimeFrame] = useState<TimeFrame>('week')
+  const [keywords, setKeywords] = useState<string[]>([]);
+  const [secondaryKeywords, setSecondaryKeywords] = useState<string[]>([]);
+  const [antiKeywords, setAntiKeywords] = useState<string[]>([]);
+  const [currentKeyword, setCurrentKeyword] = useState('');
+  const [currentSecondaryKeyword, setCurrentSecondaryKeyword] = useState('');
+  const [currentAntiKeyword, setCurrentAntiKeyword] = useState('');
+  const [resultCount, setResultCount] = useState([50]);
+  const [timeFrame, setTimeFrame] = useState<TimeFrame>('week');
 
   const handleAddKeyword = (type: 'primary' | 'secondary' | 'anti') => {
     if (type === 'primary' && currentKeyword.trim()) {
-      setKeywords([...keywords, currentKeyword.trim()])
-      setCurrentKeyword('')
+      setKeywords([...keywords, currentKeyword.trim()]);
+      setCurrentKeyword('');
     } else if (type === 'secondary' && currentSecondaryKeyword.trim()) {
-      setSecondaryKeywords([...secondaryKeywords, currentSecondaryKeyword.trim()])
-      setCurrentSecondaryKeyword('')
+      setSecondaryKeywords([
+        ...secondaryKeywords,
+        currentSecondaryKeyword.trim(),
+      ]);
+      setCurrentSecondaryKeyword('');
     } else if (type === 'anti' && currentAntiKeyword.trim()) {
-      setAntiKeywords([...antiKeywords, currentAntiKeyword.trim()])
-      setCurrentAntiKeyword('')
+      setAntiKeywords([...antiKeywords, currentAntiKeyword.trim()]);
+      setCurrentAntiKeyword('');
     }
-  }
+  };
 
-  const handleRemoveKeyword = (type: 'primary' | 'secondary' | 'anti', index: number) => {
+  const handleRemoveKeyword = (
+    type: 'primary' | 'secondary' | 'anti',
+    index: number
+  ) => {
     if (type === 'primary') {
-      setKeywords(keywords.filter((_, i) => i !== index))
+      setKeywords(keywords.filter((_, i) => i !== index));
     } else if (type === 'secondary') {
-      setSecondaryKeywords(secondaryKeywords.filter((_, i) => i !== index))
+      setSecondaryKeywords(secondaryKeywords.filter((_, i) => i !== index));
     } else {
-      setAntiKeywords(antiKeywords.filter((_, i) => i !== index))
+      setAntiKeywords(antiKeywords.filter((_, i) => i !== index));
     }
-  }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     onSubmit({
       keywords,
       secondaryKeywords,
       antiKeywords,
       timeFrame,
       resultCount: resultCount[0],
-    })
-  }
+    });
+  };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-8">
+    <form onSubmit={handleSubmit} className='space-y-8'>
       <Card>
-        <CardContent className="pt-6 space-y-8">
+        <CardContent className='pt-6 space-y-8'>
           {/* Primary Keywords */}
-          <div className="space-y-4">
-            <Label htmlFor="keywords">Primary Keywords</Label>
-            <div className="flex gap-2">
+          <div className='space-y-4'>
+            <Label htmlFor='keywords'>Primary Keywords</Label>
+            <div className='flex gap-2'>
               <Input
-                id="keywords"
+                id='keywords'
                 value={currentKeyword}
                 onChange={(e) => setCurrentKeyword(e.target.value)}
-                placeholder="Enter primary keywords to track"
+                placeholder='Enter primary keywords to track'
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
-                    e.preventDefault()
-                    handleAddKeyword('primary')
+                    e.preventDefault();
+                    handleAddKeyword('primary');
                   }
                 }}
               />
               <Button
-                type="button"
+                type='button'
                 onClick={() => handleAddKeyword('primary')}
-                variant="secondary"
+                variant='secondary'
               >
                 Add
               </Button>
@@ -104,26 +110,29 @@ export function SearchForm({ onSubmit, isLoading }: SearchFormProps) {
           </div>
 
           {/* Secondary Keywords */}
-          <div className="space-y-4">
-            <Label htmlFor="secondary-keywords">Secondary Keywords</Label>
-            <p className="text-sm text-muted-foreground">Posts must contain at least one primary keyword AND one secondary keyword</p>
-            <div className="flex gap-2">
+          <div className='space-y-4'>
+            <Label htmlFor='secondary-keywords'>Secondary Keywords</Label>
+            <p className='text-sm text-muted-foreground'>
+              Posts must contain at least one primary keyword AND one secondary
+              keyword
+            </p>
+            <div className='flex gap-2'>
               <Input
-                id="secondary-keywords"
+                id='secondary-keywords'
                 value={currentSecondaryKeyword}
                 onChange={(e) => setCurrentSecondaryKeyword(e.target.value)}
-                placeholder="Enter secondary keywords to track"
+                placeholder='Enter secondary keywords to track'
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
-                    e.preventDefault()
-                    handleAddKeyword('secondary')
+                    e.preventDefault();
+                    handleAddKeyword('secondary');
                   }
                 }}
               />
               <Button
-                type="button"
+                type='button'
                 onClick={() => handleAddKeyword('secondary')}
-                variant="secondary"
+                variant='secondary'
               >
                 Add
               </Button>
@@ -131,30 +140,30 @@ export function SearchForm({ onSubmit, isLoading }: SearchFormProps) {
             <KeywordList
               keywords={secondaryKeywords}
               onRemove={(index) => handleRemoveKeyword('secondary', index)}
-              variant="secondary"
+              variant='secondary'
             />
           </div>
 
           {/* Anti-Keywords */}
-          <div className="space-y-4">
-            <Label htmlFor="anti-keywords">Anti-Keywords</Label>
-            <div className="flex gap-2">
+          <div className='space-y-4'>
+            <Label htmlFor='anti-keywords'>Anti-Keywords</Label>
+            <div className='flex gap-2'>
               <Input
-                id="anti-keywords"
+                id='anti-keywords'
                 value={currentAntiKeyword}
                 onChange={(e) => setCurrentAntiKeyword(e.target.value)}
-                placeholder="Enter keywords to exclude"
+                placeholder='Enter keywords to exclude'
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
-                    e.preventDefault()
-                    handleAddKeyword('anti')
+                    e.preventDefault();
+                    handleAddKeyword('anti');
                   }
                 }}
               />
               <Button
-                type="button"
+                type='button'
                 onClick={() => handleAddKeyword('anti')}
-                variant="secondary"
+                variant='secondary'
               >
                 Add
               </Button>
@@ -162,18 +171,18 @@ export function SearchForm({ onSubmit, isLoading }: SearchFormProps) {
             <KeywordList
               keywords={antiKeywords}
               onRemove={(index) => handleRemoveKeyword('anti', index)}
-              variant="destructive"
+              variant='destructive'
             />
           </div>
 
           {/* Time Frame */}
-          <div className="space-y-4">
-            <Label htmlFor="timeframe">Time Frame</Label>
-            <div className="flex flex-wrap gap-2">
+          <div className='space-y-4'>
+            <Label htmlFor='timeframe'>Time Frame</Label>
+            <div className='flex flex-wrap gap-2'>
               {timeFrameOptions.map(({ value, label }) => (
                 <Button
                   key={value}
-                  type="button"
+                  type='button'
                   variant={timeFrame === value ? 'default' : 'outline'}
                   onClick={() => setTimeFrame(value)}
                 >
@@ -184,10 +193,10 @@ export function SearchForm({ onSubmit, isLoading }: SearchFormProps) {
           </div>
 
           {/* Result Count */}
-          <div className="space-y-4">
-            <div className="flex justify-between">
+          <div className='space-y-4'>
+            <div className='flex justify-between'>
               <Label>Number of Results</Label>
-              <span className="text-sm text-muted-foreground">
+              <span className='text-sm text-muted-foreground'>
                 {resultCount[0]} results
               </span>
             </div>
@@ -197,31 +206,33 @@ export function SearchForm({ onSubmit, isLoading }: SearchFormProps) {
               max={100}
               min={1}
               step={1}
-              className="w-full"
+              className='w-full'
             />
           </div>
         </CardContent>
       </Card>
 
-      <div className="flex justify-end">
-        <Button 
-          type="submit" 
-          size="lg" 
-          disabled={isLoading || keywords.length === 0 || secondaryKeywords.length === 0}
+      <div className='flex justify-end'>
+        <Button
+          type='submit'
+          size='lg'
+          disabled={
+            isLoading || keywords.length === 0 || secondaryKeywords.length === 0
+          }
         >
           {isLoading ? (
             <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              <Loader2 className='mr-2 h-4 w-4 animate-spin' />
               Searching...
             </>
           ) : (
             <>
-              <Search className="mr-2 h-4 w-4" />
+              <Search className='mr-2 h-4 w-4' />
               Search
             </>
           )}
         </Button>
       </div>
     </form>
-  )
+  );
 }
