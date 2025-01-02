@@ -27,7 +27,7 @@ interface SearchResultsProps {
   title?: React.ReactNode;
   reddit: RedditPost[];
   youtube: YouTubeVideo[];
-  quora: QuoraPost[];
+  quora?: QuoraPost[];
   twitter: TwitterPost[];
 }
 
@@ -58,10 +58,10 @@ export function SearchResults({
             <Youtube className='h-4 w-4' />
             <span>YouTube ({youtube.length})</span>
           </TabsTrigger>
-          <TabsTrigger value='quora' className='space-x-2'>
+          {/* <TabsTrigger value='quora' className='space-x-2'>
             <Share2 className='h-4 w-4' />
             <span>Quora ({quora.length})</span>
-          </TabsTrigger>
+          </TabsTrigger> */}
           <TabsTrigger value='twitter' className='space-x-2'>
             <Twitter className='h-4 w-4' />
             <span>X ({twitter.length})</span>
@@ -130,11 +130,11 @@ export function SearchResults({
 
         <YoutubeSearchResult data={youtube} />
 
-        <TabsContent value='quora' className='space-y-4'>
+        {/* <TabsContent value='quora' className='space-y-4'>
           <p className='text-muted-foreground text-center py-8'>
             Quora search coming soon...
           </p>
-        </TabsContent>
+        </TabsContent> */}
 
         <TwitterSearchResult data={twitter} />
       </Tabs>
