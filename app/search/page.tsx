@@ -31,9 +31,9 @@ export default function SearchPage() {
           ? ` AND (${params.secondaryKeywords.join(' OR ')})`
           : '';
       const query = primaryQuery + secondaryQuery;
-      let twitterQuery = `"${primaryQuery}"`;
+      let twitterQuery = `(${primaryQuery})`;
       if (params.secondaryKeywords.length > 0) {
-        twitterQuery += ` "${params.secondaryKeywords.join(' OR ')}"`;
+        twitterQuery += ` ${params.secondaryKeywords.join(' OR ')}`;
       }
 
       const [redditResults, youtubeResults, twitterResults] =

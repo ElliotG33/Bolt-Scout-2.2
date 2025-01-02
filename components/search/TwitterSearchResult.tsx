@@ -21,8 +21,6 @@ interface TwitterSearchResultProps {
 export default function TwitterSearchResult({
   data,
 }: TwitterSearchResultProps) {
-  console.log('===data', data.length, data);
-
   return (
     <TabsContent value='twitter' className='space-y-4'>
       {data.length > 0 ? (
