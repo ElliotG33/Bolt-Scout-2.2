@@ -1,15 +1,18 @@
 import { TimeFrame, TwitterPost } from '@/types/search';
+// import data from './api/data/twitter.json';
 
 interface SearchTwitterProps {
   query: string;
   limit: number;
   timeFrame: TimeFrame;
+  antiKeywords: string[];
 }
 
 export async function searchTwitter({
   query,
   timeFrame,
-  limit = 20,
+  limit,
+  antiKeywords,
 }: SearchTwitterProps): Promise<TwitterPost[]> {
   try {
     const params = new URLSearchParams({
@@ -36,15 +39,23 @@ export async function searchTwitter({
       return [];
     }
 
-    return data.map((item: any) => ({
-      id: item.id,
-      text: item.text,
-      publishedAt: item.created_at,
-      username: item.username,
-      userUrl: item.userUrl,
-      tweetUrl: item.tweetUrl,
-      ...item.public_metrics,
-    }));
+    return data
+      .map((post: any) => ({
+        id: post.id,
+        text: post.text,
+        publishedAt: post.created_at,
+        username: post.username,
+        userUrl: post.userUrl,
+        tweetUrl: post.tweetUrl,
+        ...post.public_metrics,
+      }))
+      .filter((post: any) => {
+        const content = post.text.toLowerCase();
+        return !antiKeywords.some((keyword) => {
+          const iKeyword = keyword.toLowerCase();
+          return content.includes(iKeyword);
+        });
+      });
   } catch (error) {
     console.error('Twitter search error:', error);
     return [];
