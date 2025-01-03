@@ -24,23 +24,29 @@ export default function SearchPage() {
   const handleSearch = async (params: SearchParams) => {
     setIsLoading(true);
     try {
-      const { timeFrame, resultCount } = params;
-      const primaryQuery = params.keywords.join(' OR ');
+      const {
+        timeFrame,
+        resultCount,
+        keywords,
+        secondaryKeywords,
+        antiKeywords,
+      } = params;
+      const primaryQuery = keywords.join(' OR ');
       const secondaryQuery =
-        params.secondaryKeywords.length > 0
-          ? ` AND (${params.secondaryKeywords.join(' OR ')})`
+        secondaryKeywords.length > 0
+          ? ` AND (${secondaryKeywords.join(' OR ')})`
           : '';
       const query = primaryQuery + secondaryQuery;
       let twitterQuery = `(${primaryQuery})`;
-      if (params.secondaryKeywords.length > 0) {
-        twitterQuery += ` ${params.secondaryKeywords.join(' OR ')}`;
+      if (secondaryKeywords.length > 0) {
+        twitterQuery += ` ${secondaryKeywords.join(' OR ')}`;
       }
 
       const [redditResults, youtubeResults, twitterResults] =
         await Promise.allSettled([
-          searchReddit({ query, timeFrame, limit: resultCount }),
-          searchYouTube({ query, timeFrame, limit: resultCount }),
-          searchTwitter({ query: twitterQuery, timeFrame, limit: resultCount }),
+          searchReddit({ query, timeFrame, limit: resultCount, antiKeywords }),
+          searchYouTube({ query, timeFrame, limit: resultCount, antiKeywords }),
+          searchTwitter({ query: twitterQuery, timeFrame, limit: resultCount, antiKeywords }),
         ]);
 
       const redditData =
