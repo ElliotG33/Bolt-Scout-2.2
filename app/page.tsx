@@ -1,11 +1,25 @@
+'use client';
+
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowRight, Search, Zap, MessageSquare, BarChart } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
 
+import { toast } from '@/hooks/use-toast';
+import { ArrowRight, Search, Zap, MessageSquare, BarChart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 
 export default function Home() {
+  const searchParams = useSearchParams();
+  // Access the parameter value
+  const subscription = searchParams.get('subscription') || '';
+  if (subscription === 'success') {
+    toast({
+      title: 'Subscription Successful.',
+      variant: 'default',
+    });
+  }
+
   return (
     <>
       {/* Hero Section */}

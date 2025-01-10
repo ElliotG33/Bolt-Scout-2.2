@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { connectToDatabase } from '@/lib/utils/mongodb';
 import { auth } from '@/lib/auth';
 import Alert from '@/models/Alert';
+import mongoose from 'mongoose';
 
 export async function POST(request: NextRequest) {
   try {
@@ -10,11 +11,12 @@ export async function POST(request: NextRequest) {
 
     const reqBody = await request.json();
     const { keywords, email, frequency } = reqBody;
+    const userId = new mongoose.Types.ObjectId(session.user.id);
     const newAlert = new Alert({
       keywords,
       email,
       frequency,
-      userId: session.user.id,
+      userId,
     });
 
     const alert = await newAlert.save();
