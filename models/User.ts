@@ -1,6 +1,7 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
 export interface IUser extends Document {
   _id: mongoose.Types.ObjectId;
+  stripeCustomerId: string; // Store Stripe Customer ID
   name: string;
   email: string;
   password: string;
@@ -13,6 +14,9 @@ export interface IUser extends Document {
 }
 
 const UserSchema = new Schema<IUser>({
+  stripeCustomerId: {
+    type: String,
+  },
   name: {
     type: String,
     required: [true, 'Please provide a name.'],

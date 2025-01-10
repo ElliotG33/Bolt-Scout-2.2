@@ -18,13 +18,14 @@ const navigation = [
   { name: 'How it Works', href: '/#how-it-works' },
   { name: 'Search', href: '/search' },
   { name: 'Alerts', href: '/alerts' },
+  { name: 'Pricing', href: '/pricing' },
 ];
 
 export function Header() {
   const pathname = usePathname();
-  if (isAuthPage(pathname)) return <></>;
-
   const { data: session } = useSession();
+  
+  if (isAuthPage(pathname)) return <></>;
 
   const isActive = (href: string) => {
     if (href.startsWith('/#')) {
@@ -50,6 +51,28 @@ export function Header() {
         variant: 'destructive',
       });
     }
+  };
+
+  const navigateToPortal = async (e: any) => {
+    e.preventDefault();
+    console.log('== stop', stop);
+    // return;
+    if (!session) {
+      alert('You need to log in to manage your account.');
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        '/api/stripe/create-customer-portal-session'
+      );
+      // Redirect the user to the portal
+      window.location.href = response.data.url;
+    } catch (error: any) {
+      console.error('Error navigating to customer portal:', error.message);
+      alert('Failed to navigate to the customer portal. Please try again.');
+    }
+    return;
   };
 
   return (
@@ -78,6 +101,13 @@ export function Header() {
         <div className='flex items-center space-x-4'>
           <div className='hidden md:flex items-center space-x-4'>
             <ModeToggle />
+
+            {session?.subscription && (
+              <Button variant='ghost' onClick={navigateToPortal}>
+                Manage Account
+              </Button>
+            )}
+
             <Button variant='ghost' asChild>
               {session ? (
                 <Link href='#' onClick={() => signOut()}>

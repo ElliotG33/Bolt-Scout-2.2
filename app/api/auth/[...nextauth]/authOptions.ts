@@ -1,9 +1,10 @@
-import { loginUser } from '@/lib/actions/user.action';
+import { loginUser } from '@/lib/actions/user';
 import type { NextAuthOptions, User as IUser } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { connectToDatabase } from '@/lib/utils/mongodb';
 import User from '@/models/User';
+import Subscription, { ISubscription } from '@/models/Subscription';
 
 interface ExtendedUser extends IUser {
   role?: string;
@@ -89,6 +90,11 @@ export const authOptions: NextAuthOptions = {
           if (foundUser) {
             session.user.id = foundUser._id.toString();
             // session.user.role = foundUser.role;
+            const subscription = await Subscription.exists({
+              userId: session.user.id,
+              status: 'active',
+            });
+            session.subscription = subscription ? true : false;
           }
         } catch (error) {
           console.error('Error fetching user data:', error);
