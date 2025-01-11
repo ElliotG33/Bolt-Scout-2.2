@@ -6,6 +6,7 @@ export interface IAlert extends Document {
   email: string;
   userEmail: string;
   keywords: [string];
+  antiKeywords: [string];
   frequency: number;
   active: boolean;
   createdAt: Date;
@@ -28,6 +29,9 @@ const AlertSchema = new Schema<IAlert>({
   keywords: {
     type: [String],
     required: [true, 'Please provide keywords.'],
+  },
+  antiKeywords: {
+    type: [String],
   },
   frequency: {
     type: Number,
