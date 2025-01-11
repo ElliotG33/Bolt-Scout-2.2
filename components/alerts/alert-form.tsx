@@ -37,7 +37,7 @@ export function AlertForm({ onSubmit }: AlertFormProps) {
     if (alertCount >= planLimit) {
       setLimitReached(true);
     }
-  }, [alertCount]);
+  }, [alertCount, planLimit]);
 
   useEffect(() => {
     const fetchUserSubscription = async () => {

@@ -15,7 +15,6 @@ export default function PricingPage() {
   const router = useRouter();
 
   const onSubscribe = async (planId: string) => {
-    console.log('==session', session,planId);
     if (!session) {
       router.push('/auth/signin');
       return;
