@@ -12,6 +12,7 @@ import { Menu } from 'lucide-react';
 import { isAuthPage } from '@/lib/utils/auth';
 import axios from 'axios';
 import { toast } from '@/hooks/use-toast';
+import { navigateToPortal } from '@/helpers/stripe';
 
 const navigation = [
   { name: 'Features', href: '/#features' },
@@ -24,7 +25,7 @@ const navigation = [
 export function Header() {
   const pathname = usePathname();
   const { data: session } = useSession();
-  
+
   if (isAuthPage(pathname)) return <></>;
 
   const isActive = (href: string) => {
@@ -53,26 +54,9 @@ export function Header() {
     }
   };
 
-  const navigateToPortal = async (e: any) => {
+  const manageAccount = async (e: any) => {
     e.preventDefault();
-    console.log('== stop', stop);
-    // return;
-    if (!session) {
-      alert('You need to log in to manage your account.');
-      return;
-    }
-
-    try {
-      const response = await axios.post(
-        '/api/stripe/create-customer-portal-session'
-      );
-      // Redirect the user to the portal
-      window.location.href = response.data.url;
-    } catch (error: any) {
-      console.error('Error navigating to customer portal:', error.message);
-      alert('Failed to navigate to the customer portal. Please try again.');
-    }
-    return;
+    return navigateToPortal(session);
   };
 
   return (
@@ -103,7 +87,7 @@ export function Header() {
             <ModeToggle />
 
             {session?.subscription && (
-              <Button variant='ghost' onClick={navigateToPortal}>
+              <Button variant='ghost' onClick={manageAccount}>
                 Manage Account
               </Button>
             )}

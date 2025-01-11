@@ -1,14 +1,9 @@
 import { auth } from '@/lib/auth';
-import { getStripePriceId } from '@/lib/tiers';
+import { stripe } from '@/lib/stripe';
 import { connectToDatabase } from '@/lib/utils/mongodb';
 import User from '@/models/User';
 import mongoose from 'mongoose';
 import { NextRequest, NextResponse } from 'next/server';
-import Stripe from 'stripe';
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2024-12-18.acacia',
-});
 
 export async function POST(req: NextRequest, res: NextResponse) {
   if (req.method === 'POST') {
@@ -34,7 +29,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
       const session = await stripe.billingPortal.sessions.create({
         customer: user.stripeCustomerId,
-        return_url: `${process.env.BASE_URL}`,
+        return_url: `${process.env.NEXTAUTH_URL}`,
       });
       return NextResponse.json({ url: session.url }, { status: 200 });
     } catch (error: any) {

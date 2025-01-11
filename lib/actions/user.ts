@@ -3,7 +3,6 @@
 import User from '@/models/User';
 import { connectToDatabase } from '@/lib/utils/mongodb';
 import bcryptjs from 'bcryptjs';
-import { NextResponse } from 'next/server';
 import { auth } from '../auth';
 import mongoose from 'mongoose';
 import Subscription from '@/models/Subscription';

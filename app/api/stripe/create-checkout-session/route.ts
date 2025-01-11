@@ -1,17 +1,12 @@
 import { auth } from '@/lib/auth';
+import { stripe } from '@/lib/stripe';
 import { getStripePriceId } from '@/lib/tiers';
 import { connectToDatabase } from '@/lib/utils/mongodb';
 import User from '@/models/User';
 import mongoose from 'mongoose';
 import { NextRequest, NextResponse } from 'next/server';
-import Stripe from 'stripe';
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2024-12-18.acacia',
-});
 
 export async function POST(req: NextRequest, res: NextResponse) {
-  console.log(req);
   if (req.method === 'POST') {
     const reqBody = await req.json();
     const { planId } = reqBody;
@@ -64,8 +59,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
           },
         ],
         mode: 'subscription',
-        success_url: `${process.env.BASE_URL}?subscription=success`,
-        cancel_url: `${process.env.BASE_URL}`,
+        success_url: `${process.env.NEXTAUTH_URL}?subscription=success`,
+        cancel_url: `${process.env.NEXTAUTH_URL}`,
       });
       // Respond with the session ID to the client
       return NextResponse.json({ sessionId: session.id }, { status: 200 });

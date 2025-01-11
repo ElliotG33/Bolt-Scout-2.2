@@ -44,12 +44,31 @@ export default function SigninPage() {
     const { email, password } = user;
 
     if (email && password) {
-      const res = await signIn('credentials', {
-        email: email,
-        password: password,
-        redirect: true,
-        callbackUrl: '/',
-      });
+      setProcessing(true);
+      try {
+        await signIn('credentials', {
+          email: email,
+          password: password,
+          redirect: true,
+          callbackUrl: '/',
+        });
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setProcessing(false);
+      }
+    }
+  };
+
+  const handleGoogleSignIn = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setProcessing(true);
+    try {
+      return signIn('google');
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setProcessing(false);
     }
   };
 
@@ -59,9 +78,12 @@ export default function SigninPage() {
         <h1 className='text-3xl font-bold text-center mb-6'>Sign in</h1>
 
         <Button
-          onClick={() => signIn('google')}
+          onClick={handleGoogleSignIn}
+          disabled={processing}
           variant='outline'
-          className='gap-4 w-full flex items-center'
+          className={`gap-4 w-full flex items-center ${
+            processing ? 'opacity-50 cursor-not-allowed' : ''
+          }`}
           size='lg'
         >
           Sign in with Google

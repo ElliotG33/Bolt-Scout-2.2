@@ -8,27 +8,26 @@ import { Card } from '@/components/ui/card';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { tiers } from '@/lib/tiers';
+import { navigateToPortal } from '@/helpers/stripe';
 
 export default function PricingPage() {
   const { data: session } = useSession();
   const router = useRouter();
 
   const onSubscribe = async (planId: string) => {
+    console.log('==session', session,planId);
     if (!session) {
       router.push('/auth/signin');
-      return;
-    }
-
-    if (session.subscription) {
-      alert(
-        'You already have a active subscription. Please click on Manage Account on top to upgrade.'
-      );
       return;
     }
 
     if (planId === 'tier-enterprise') {
       alert('Please call us for Enterprise Plan. Thank you.');
       return;
+    }
+
+    if (session.subscription) {
+      return navigateToPortal(session);
     }
 
     handleSubscribe(planId);
