@@ -7,16 +7,22 @@ export const plans: Record<
     platform: string[];
   }
 > = {
+  free_tier: {
+    price: 0,
+    search_limit: 5,
+    custom_alert_limit: 1,
+    platform: ['reddit', 'twitter', 'youtube'],
+  },
   price_1Qdx4M2fJNOk2hi4BGXQ4RP6: {
     price: 10,
-    search_limit: 3,
-    custom_alert_limit: 2,
-    platform: ['reddit'],
+    search_limit: 10,
+    custom_alert_limit: 10,
+    platform: ['reddit', 'twitter', 'youtube'],
   },
   price_1Qdx4c2fJNOk2hi4BtQiimFX: {
     price: 30,
-    search_limit: 5,
-    custom_alert_limit: 3,
+    search_limit: 30,
+    custom_alert_limit: 30,
     platform: ['reddit', 'twitter', 'youtube'],
   },
   enterprise: {
