@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 import { auth } from '../auth';
 import { connectToDatabase } from '../utils/mongodb';
 import { NextResponse } from 'next/server';
-import Subscription from '@/models/Subscription';
+import Subscription, { ISubscription } from '@/models/Subscription';
 import { plans } from '../plans';
 import UserSearch from '@/models/UserSearch';
 import Alert from '@/models/Alert';
@@ -69,26 +69,32 @@ export async function getSubscriptionData(id?: string) {
       userId = id;
     }
 
-    const subscription = await Subscription.findOne({
+    let subscription = await Subscription.findOne({
       userId,
       status: 'active',
     }).populate('planId');
 
     if (!subscription) {
-      return null;
+      const startDate = new Date();
+      startDate.setDate(1); // Set to the first day of the current month
+      startDate.setHours(0, 0, 0, 0); // Set to the beginning of the day
+
+      const endDate = new Date();
+      endDate.setMonth(endDate.getMonth() + 1); // Set to the first day of the next month
+      endDate.setDate(0); // Set to the last day of the current month
+      endDate.setHours(23, 59, 59, 999); // Set to the end of the day
+
+      subscription = new Subscription({
+        planId: 'free_tier',
+        startDate,
+        endDate,
+        userId,
+        status: 'active',
+      });
     }
 
     const { planId, startDate, endDate } = subscription;
     const planDetails = plans[planId];
-
-    // const startDate = new Date();
-    // startDate.setDate(1); // Set to the first day of the current month
-    // startDate.setHours(0, 0, 0, 0); // Set to the beginning of the day
-
-    // const endDate = new Date();
-    // endDate.setMonth(endDate.getMonth() + 1); // Set to the first day of the next month
-    // endDate.setDate(0); // Set to the last day of the current month
-    // endDate.setHours(23, 59, 59, 999); // Set to the end of the day
 
     const searchCount = await UserSearch.countDocuments({
       userId,

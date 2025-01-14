@@ -13,6 +13,7 @@ import {
   SearchResults as SearchResultsType,
 } from '@/types/search';
 import { logUserSearch } from '@/lib/actions/search';
+import HorizontalBanner from '@/components/googlead/HorizontalBanner';
 
 export default function SearchPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -108,11 +109,15 @@ export default function SearchPage() {
       </div>
       <SearchForm onSubmit={handleSearch} isLoading={isLoading} />
 
+      <HorizontalBanner />
+
       {(results.reddit.length > 0 ||
         results.youtube.length > 0 ||
         results.twitter.length > 0) && (
         <div className='mt-8'>
           <SearchResults {...results} />
+
+          <HorizontalBanner />
         </div>
       )}
     </div>

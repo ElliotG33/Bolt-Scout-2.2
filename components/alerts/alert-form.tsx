@@ -43,7 +43,7 @@ export function AlertForm({ onSubmit }: AlertFormProps) {
     const fetchUserSubscription = async () => {
       const subscription = await getSubscriptionData();
       // console.log(subscription);
-      setPlanLimit(subscription?.planDetails?.search_limit);
+      setPlanLimit(subscription?.planDetails?.custom_alert_limit);
       if (subscription?.alertCount) setAlertCount(subscription?.alertCount);
       if (
         subscription?.alertCount >=

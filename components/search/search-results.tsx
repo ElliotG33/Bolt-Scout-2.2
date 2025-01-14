@@ -6,22 +6,12 @@ import {
   QuoraPost,
   TwitterPost,
 } from '@/types/search';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import {
-  ArrowUpFromLine,
-  MessageSquare,
-  ExternalLink,
-  Youtube,
-  Share2,
-  ThumbsUp,
-  Twitter,
-} from 'lucide-react';
+import { MessageSquare, Twitter, Youtube } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { formatDistanceToNow } from 'date-fns';
-import { Button } from '@/components/ui/button';
 import YoutubeSearchResult from './YoutubeSearchResult';
 import TwitterSearchResult from './TwitterSearchResult';
+import RedditSearchResult from './RedditSearchResult';
 
 interface SearchResultsProps {
   title?: React.ReactNode;
@@ -69,63 +59,7 @@ export function SearchResults({
         </TabsList>
 
         <TabsContent value='reddit' className='space-y-4'>
-          {reddit.map((post, index) => (
-            <motion.div
-              key={post.url}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-            >
-              <Card>
-                <CardHeader>
-                  <CardTitle className='text-lg font-medium'>
-                    <a
-                      href={post.url}
-                      target='_blank'
-                      rel='noopener noreferrer'
-                      className='hover:text-primary flex items-center gap-2'
-                    >
-                      {post.title}
-                      <ExternalLink className='h-4 w-4' />
-                    </a>
-                  </CardTitle>
-                  <div className='flex items-center gap-4 text-sm text-muted-foreground'>
-                    <span>{post.subreddit}</span>
-                    <span>•</span>
-                    <span>{formatDistanceToNow(new Date(post.date))} ago</span>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <p className='text-muted-foreground line-clamp-3 mb-4'>
-                    {post.content}
-                  </p>
-                  <div className='flex items-center justify-between'>
-                    <div className='flex items-center gap-4 text-sm'>
-                      <div className='flex items-center gap-1'>
-                        <ArrowUpFromLine className='h-4 w-4' />
-                        <span>{post.score}</span>
-                      </div>
-                      <div className='flex items-center gap-1'>
-                        <MessageSquare className='h-4 w-4' />
-                        <span>{post.numComments} comments</span>
-                      </div>
-                    </div>
-                    <Button
-                      variant='outline'
-                      size='sm'
-                      onClick={() =>
-                        window.open(post.url, '_blank', 'noopener,noreferrer')
-                      }
-                      className='gap-2'
-                    >
-                      View Post
-                      <ExternalLink className='h-4 w-4' />
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
+          <RedditSearchResult data={reddit} />
         </TabsContent>
 
         <YoutubeSearchResult data={youtube} />

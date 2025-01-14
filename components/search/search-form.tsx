@@ -49,12 +49,11 @@ export function SearchForm({ onSubmit, isLoading }: SearchFormProps) {
     if (searchCount >= planLimit) {
       setLimitReached(true);
     }
-  }, [searchCount]);
+  }, [planLimit, searchCount]);
 
   useEffect(() => {
     const fetchUserSubscription = async () => {
       const subscription = await getSubscriptionData();
-      // console.log(subscription);
       setPlanLimit(subscription?.planDetails?.search_limit);
       if (subscription?.searchCount) setSearchCount(subscription?.searchCount);
 
