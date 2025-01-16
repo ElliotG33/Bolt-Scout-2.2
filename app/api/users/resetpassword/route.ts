@@ -1,12 +1,12 @@
-import { connect } from '@/dbConfig/dbConfig';
 import { NextRequest, NextResponse } from 'next/server';
+import { connectToDatabase } from '@/lib/utils/mongodb';
 import User from '@/models/User';
 import bcrypt from 'bcryptjs';
 
-connect();
-
 export async function POST(req: NextRequest) {
   try {
+    await connectToDatabase();
+
     const reqBody = await req.json();
     const { token, password } = reqBody;
     const currentTime = new Date(); // Current time
@@ -29,8 +29,8 @@ export async function POST(req: NextRequest) {
 
     // Update the user's verification status
     user.password = hashedPassword;
-    user.forgotPasswordToken = undefined;
-    user.forgotPasswordTokenExpiry = undefined;
+    user.forgotPasswordToken = '';
+    user.forgotPasswordTokenExpiry = '';
     await user.save();
 
     return NextResponse.json({

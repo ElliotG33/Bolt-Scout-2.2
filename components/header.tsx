@@ -28,6 +28,8 @@ export function Header() {
 
   if (isAuthPage(pathname)) return <></>;
 
+  const hasFreePlan = session && !session?.subscription;
+
   const isActive = (href: string) => {
     if (href.startsWith('/#')) {
       return pathname === '/';
@@ -86,12 +88,23 @@ export function Header() {
           <div className='hidden md:flex items-center space-x-4'>
             <ModeToggle />
 
-            {session?.subscription ? (
+            {session?.subscription && (
               <Button variant='ghost' onClick={manageAccount}>
                 Manage Account
               </Button>
-            ) : (
-              <Button variant='ghost' onClick={() => alert('You are currently using Free Plan. To subscribe to available plans click on Pricing.')}>Free Plan</Button>
+            )}
+
+            {hasFreePlan && (
+              <Button
+                variant='ghost'
+                onClick={() =>
+                  alert(
+                    'You are currently using Free Plan. To subscribe to available plans click on Pricing.'
+                  )
+                }
+              >
+                Free Plan
+              </Button>
             )}
 
             <Button variant='ghost' asChild>

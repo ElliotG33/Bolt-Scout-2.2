@@ -1,20 +1,19 @@
-import { connect } from '@/dbConfig/dbConfig';
-import User from '@/models/User';
 import { NextRequest, NextResponse } from 'next/server';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import { sendMail } from '@/helpers/mailer';
 
-connect();
+import { connectToDatabase } from '@/lib/utils/mongodb';
+import User from '@/models/User';
+import { sendMail } from '@/helpers/mailer';
 
 export async function POST(request: NextRequest) {
   try {
+    await connectToDatabase();
+
     const reqBody = await request.json();
     const { email } = reqBody;
     const user = await User.findOne({ email });
     if (!user) {
       return NextResponse.json({
-        message: 'Rest link sent successfully.',
+        message: 'Reset link sent successfully.',
         success: true,
       });
     }
@@ -27,7 +26,7 @@ export async function POST(request: NextRequest) {
     });
 
     return NextResponse.json({
-      message: 'Rest link sent successfully.',
+      message: 'Reset link sent successfully.',
       success: true,
     });
   } catch (error: any) {
