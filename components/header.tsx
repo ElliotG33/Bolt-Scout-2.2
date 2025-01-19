@@ -12,19 +12,23 @@ import { Menu } from 'lucide-react';
 import { isAuthPage } from '@/lib/utils/auth';
 import axios from 'axios';
 import { toast } from '@/hooks/use-toast';
+import { navigateToPortal } from '@/helpers/stripe';
 
 const navigation = [
   { name: 'Features', href: '/#features' },
   { name: 'How it Works', href: '/#how-it-works' },
   { name: 'Search', href: '/search' },
   { name: 'Alerts', href: '/alerts' },
+  { name: 'Pricing', href: '/pricing' },
 ];
 
 export function Header() {
   const pathname = usePathname();
+  const { data: session } = useSession();
+
   if (isAuthPage(pathname)) return <></>;
 
-  const { data: session } = useSession();
+  const hasFreePlan = session && !session?.subscription;
 
   const isActive = (href: string) => {
     if (href.startsWith('/#')) {
@@ -50,6 +54,11 @@ export function Header() {
         variant: 'destructive',
       });
     }
+  };
+
+  const manageAccount = async (e: any) => {
+    e.preventDefault();
+    return navigateToPortal(session);
   };
 
   return (
@@ -78,6 +87,26 @@ export function Header() {
         <div className='flex items-center space-x-4'>
           <div className='hidden md:flex items-center space-x-4'>
             <ModeToggle />
+
+            {session?.subscription && (
+              <Button variant='ghost' onClick={manageAccount}>
+                Manage Account
+              </Button>
+            )}
+
+            {hasFreePlan && (
+              <Button
+                variant='ghost'
+                onClick={() =>
+                  alert(
+                    'You are currently using Free Plan. To subscribe to available plans click on Pricing.'
+                  )
+                }
+              >
+                Free Plan
+              </Button>
+            )}
+
             <Button variant='ghost' asChild>
               {session ? (
                 <Link href='#' onClick={() => signOut()}>

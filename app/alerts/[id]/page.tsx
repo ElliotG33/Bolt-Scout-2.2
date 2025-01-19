@@ -21,6 +21,7 @@ export default function AlertResults() {
   });
   const isValidId = useRef(false);
   const keywords = useRef<string[]>([]);
+  const antiKeywords = useRef<string[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,6 +34,7 @@ export default function AlertResults() {
 
         isValidId.current = true;
         keywords.current = alert.keywords;
+        // antiKeywords.current = alert.antiKeywords;
 
         const timeFrame = 'week';
         const limit = 50;
@@ -40,12 +42,23 @@ export default function AlertResults() {
 
         const [redditResults, youtubeResults, twitterResults] =
           await Promise.allSettled([
-            searchReddit({ query, timeFrame, limit }),
-            searchYouTube({ query, timeFrame, limit }),
+            searchReddit({
+              query,
+              timeFrame,
+              limit,
+              antiKeywords: antiKeywords.current,
+            }),
+            searchYouTube({
+              query,
+              timeFrame,
+              limit,
+              antiKeywords: antiKeywords.current,
+            }),
             searchTwitter({
               query,
               timeFrame,
               limit,
+              antiKeywords: antiKeywords.current,
             }),
           ]);
 

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+
 import { SearchForm } from '@/components/search/search-form';
 import { SearchResults } from '@/components/search/search-results';
 import { searchReddit } from '@/lib/reddit';
@@ -11,6 +12,8 @@ import {
   SearchParams,
   SearchResults as SearchResultsType,
 } from '@/types/search';
+import { logUserSearch } from '@/lib/actions/search';
+import HorizontalBanner from '@/components/googlead/HorizontalBanner';
 
 export default function SearchPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -46,7 +49,12 @@ export default function SearchPage() {
         await Promise.allSettled([
           searchReddit({ query, timeFrame, limit: resultCount, antiKeywords }),
           searchYouTube({ query, timeFrame, limit: resultCount, antiKeywords }),
-          searchTwitter({ query: twitterQuery, timeFrame, limit: resultCount, antiKeywords }),
+          searchTwitter({
+            query: twitterQuery,
+            timeFrame,
+            limit: resultCount,
+            antiKeywords,
+          }),
         ]);
 
       const redditData =
@@ -73,6 +81,13 @@ export default function SearchPage() {
         const total = redditData.length + youtubeData.length;
         toast.success(`Found ${total} result${total === 1 ? '' : 's'}`);
       }
+
+      await logUserSearch({
+        keywords,
+        secondaryKeywords,
+        antiKeywords,
+        timeFrame,
+      });
     } catch (error) {
       console.error('Search error:', error);
       toast.error('Failed to perform search');
@@ -93,11 +108,16 @@ export default function SearchPage() {
         </p>
       </div>
       <SearchForm onSubmit={handleSearch} isLoading={isLoading} />
+
+      <HorizontalBanner />
+
       {(results.reddit.length > 0 ||
         results.youtube.length > 0 ||
         results.twitter.length > 0) && (
         <div className='mt-8'>
           <SearchResults {...results} />
+
+          <HorizontalBanner />
         </div>
       )}
     </div>

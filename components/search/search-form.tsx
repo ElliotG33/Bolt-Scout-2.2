@@ -1,7 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+// import { useSession } from 'next-auth/react';
+
 import { Search, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -10,6 +12,7 @@ import { Slider } from '@/components/ui/slider';
 import { Card, CardContent } from '@/components/ui/card';
 import { KeywordList } from '@/components/search/keyword-list';
 import { TimeFrame, SearchParams } from '@/types/search';
+import { getSubscriptionData } from '@/lib/actions/subscription';
 
 interface SearchFormProps {
   onSubmit: (data: SearchParams) => void;
@@ -26,6 +29,8 @@ const timeFrameOptions: { value: TimeFrame; label: string }[] = [
 ];
 
 export function SearchForm({ onSubmit, isLoading }: SearchFormProps) {
+  // const { data: session } = useSession();
+
   const [keywords, setKeywords] = useState<string[]>([]);
   const [secondaryKeywords, setSecondaryKeywords] = useState<string[]>([]);
   const [antiKeywords, setAntiKeywords] = useState<string[]>([]);
@@ -34,6 +39,32 @@ export function SearchForm({ onSubmit, isLoading }: SearchFormProps) {
   const [currentAntiKeyword, setCurrentAntiKeyword] = useState('');
   const [resultCount, setResultCount] = useState([50]);
   const [timeFrame, setTimeFrame] = useState<TimeFrame>('week');
+  const [searchCount, setSearchCount] = useState(0);
+  const [planLimit, setPlanLimit] = useState(0);
+  const [limitReached, setLimitReached] = useState(false);
+
+  useEffect(() => {
+    if (searchCount === 0 || planLimit === 0) return;
+
+    if (searchCount >= planLimit) {
+      setLimitReached(true);
+    }
+  }, [planLimit, searchCount]);
+
+  useEffect(() => {
+    const fetchUserSubscription = async () => {
+      const subscription = await getSubscriptionData();
+      setPlanLimit(subscription?.planDetails?.search_limit);
+      if (subscription?.searchCount) setSearchCount(subscription?.searchCount);
+
+      if (
+        subscription?.searchCount >= subscription?.planDetails?.search_limit
+      ) {
+        setLimitReached(true);
+      }
+    };
+    fetchUserSubscription();
+  }, []);
 
   const handleAddKeyword = (type: 'primary' | 'secondary' | 'anti') => {
     if (type === 'primary' && currentKeyword.trim()) {
@@ -64,8 +95,11 @@ export function SearchForm({ onSubmit, isLoading }: SearchFormProps) {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (limitReached) return;
+
     onSubmit({
       keywords,
       secondaryKeywords,
@@ -73,6 +107,7 @@ export function SearchForm({ onSubmit, isLoading }: SearchFormProps) {
       timeFrame,
       resultCount: resultCount[0],
     });
+    setSearchCount((prevCount) => prevCount + 1);
   };
 
   return (
@@ -212,12 +247,20 @@ export function SearchForm({ onSubmit, isLoading }: SearchFormProps) {
         </CardContent>
       </Card>
 
-      <div className='flex justify-end'>
+      <div className='flex justify-end space-y-6'>
+        {limitReached && (
+          <div className='text-red-600 p-8'>
+            Limit Reached! Upgrade your plan.
+          </div>
+        )}
         <Button
           type='submit'
           size='lg'
           disabled={
-            isLoading || keywords.length === 0 || secondaryKeywords.length === 0
+            isLoading ||
+            keywords.length === 0 ||
+            secondaryKeywords.length === 0 ||
+            limitReached
           }
         >
           {isLoading ? (

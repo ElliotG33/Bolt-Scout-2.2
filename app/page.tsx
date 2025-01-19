@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 
 import YoutubeIframe from '@/components/YoutubeIframe';
+
 import { toast } from '@/hooks/use-toast';
 import { ArrowRight, Search, Zap, MessageSquare, BarChart } from 'lucide-react';
 import { Button } from '@/components/ui/button';

@@ -2,10 +2,11 @@ import mongoose, { Schema, Document, Model } from 'mongoose';
 
 export interface IAlert extends Document {
   _id: mongoose.Types.ObjectId;
-  userId: string; //mongoose.Schema.Types.ObjectId;
+  userId: mongoose.Schema.Types.ObjectId;
   email: string;
   userEmail: string;
   keywords: [string];
+  antiKeywords: [string];
   frequency: number;
   active: boolean;
   createdAt: Date;
@@ -14,8 +15,8 @@ export interface IAlert extends Document {
 
 const AlertSchema = new Schema<IAlert>({
   userId: {
-    type: String, //mongoose.Schema.Types.ObjectId,
-    // ref: 'User', // Reference to the User model
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User', // Reference to the User model
     required: [true, 'Please provide user id.'],
   },
   userEmail: {
@@ -28,6 +29,9 @@ const AlertSchema = new Schema<IAlert>({
   keywords: {
     type: [String],
     required: [true, 'Please provide keywords.'],
+  },
+  antiKeywords: {
+    type: [String],
   },
   frequency: {
     type: Number,

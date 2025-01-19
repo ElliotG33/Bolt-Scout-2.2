@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Alert } from '@/types/alerts';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -16,6 +16,7 @@ import {
 import { KeywordList } from '@/components/search/keyword-list';
 import { Info } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
+import { getSubscriptionData } from '@/lib/actions/subscription';
 
 interface AlertFormProps {
   onSubmit: (alert: Alert) => void;
@@ -26,6 +27,33 @@ export function AlertForm({ onSubmit }: AlertFormProps) {
   const [frequency, setFrequency] = useState('24');
   const [keywords, setKeywords] = useState<string[]>([]);
   const [currentKeyword, setCurrentKeyword] = useState('');
+  const [alertCount, setAlertCount] = useState(0);
+  const [planLimit, setPlanLimit] = useState(0);
+  const [limitReached, setLimitReached] = useState(false);
+
+  useEffect(() => {
+    if (alertCount === 0 || planLimit === 0) return;
+
+    if (alertCount >= planLimit) {
+      setLimitReached(true);
+    }
+  }, [alertCount, planLimit]);
+
+  useEffect(() => {
+    const fetchUserSubscription = async () => {
+      const subscription = await getSubscriptionData();
+      // console.log(subscription);
+      setPlanLimit(subscription?.planDetails?.custom_alert_limit);
+      if (subscription?.alertCount) setAlertCount(subscription?.alertCount);
+      if (
+        subscription?.alertCount >=
+        subscription?.planDetails?.custom_alert_limit
+      ) {
+        setLimitReached(true);
+      }
+    };
+    fetchUserSubscription();
+  }, []);
 
   const handleAddKeyword = () => {
     if (currentKeyword.trim()) {
@@ -48,6 +76,8 @@ export function AlertForm({ onSubmit }: AlertFormProps) {
       return;
     }
 
+    if (limitReached) return;
+
     onSubmit({
       email,
       keywords,
@@ -61,6 +91,7 @@ export function AlertForm({ onSubmit }: AlertFormProps) {
     setEmail('');
     setKeywords([]);
     setFrequency('24');
+    setAlertCount((prevCount) => prevCount + 1);
   };
 
   return (
@@ -130,8 +161,17 @@ export function AlertForm({ onSubmit }: AlertFormProps) {
         </CardContent>
       </Card>
 
-      <div className='flex justify-end mt-6'>
-        <Button type='submit' disabled={!email || keywords.length === 0}>
+      <div className='flex justify-end mt-6 space-y-6'>
+        {limitReached && (
+          <div className='text-red-600 p-8'>
+            Limit Reached! Upgrade your plan.
+          </div>
+        )}
+
+        <Button
+          type='submit'
+          disabled={!email || keywords.length === 0 || limitReached}
+        >
           Create Alert
         </Button>
       </div>
