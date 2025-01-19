@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 
+import YoutubeIframe from '@/components/YoutubeIframe';
 import { toast } from '@/hooks/use-toast';
 import { ArrowRight, Search, Zap, MessageSquare, BarChart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -33,18 +34,10 @@ export default function Home() {
               </span>
             </h1>
             <p className='text-xl text-muted-foreground'>
-Find the people that want your shit.
+              Find the people that want your shit.
             </p>
             <div className='flex flex-col sm:flex-row items-center justify-center gap-4'>
-              <iframe
-                width="560"
-                height="315"
-                src="https://www.youtube.com/watch?v=ZLhZQTu5pWU"
-                title="YouTube video player"
-                frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowfullscreen
-              ></iframe>
+              <YoutubeIframe videoId='ZLhZQTu5pWU' />
             </div>
           </div>
         </div>
@@ -66,7 +59,6 @@ Find the people that want your shit.
         </div>
       </section>
 
-
       {/* Why it Works Section */}
       <section id='why-it-works' className='py-20'>
         <div className='container'>
@@ -75,51 +67,56 @@ Find the people that want your shit.
               Why it Works
             </h2>
             <p className='text-xl text-muted-foreground'>
-              In an age where consumers are increasingly skeptical of paid ads and sponsored content, the authenticity of organic discussion stands out. Think about how often we scroll past sponsored links on Google to click a five-year-old Reddit thread, or trust YouTube comments over the product review video itself. Be the solution people naturally discover in these moments.
+              In an age where consumers are increasingly skeptical of paid ads
+              and sponsored content, the authenticity of organic discussion
+              stands out. Think about how often we scroll past sponsored links
+              on Google to click a five-year-old Reddit thread, or trust YouTube
+              comments over the product review video itself. Be the solution
+              people naturally discover in these moments.
             </p>
           </div>
         </div>
       </section>
-      <section id="features" className="py-20 bg-muted/50">
-        <div className="container">
-          <h2 className="font-lexend text-3xl md:text-4xl font-bold text-center mb-16">
+      <section id='features' className='py-20 bg-muted/50'>
+        <div className='container'>
+          <h2 className='font-lexend text-3xl md:text-4xl font-bold text-center mb-16'>
             Key Features
           </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <Card className="p-6 space-y-4 relative">
-              <div className="absolute top-4 right-4 bg-[#47e6b5] px-2 py-1 rounded-md text-white text-sm font-bold">
+          <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-8'>
+            <Card className='p-6 space-y-4 relative'>
+              <div className='absolute top-4 right-4 bg-[#47e6b5] px-2 py-1 rounded-md text-white text-sm font-bold'>
                 Coming Soon
               </div>
-              <Search className="h-12 w-12 text-[#47e6b5]" />
-              <h3 className="font-lexend text-xl font-bold">
-                AI Prioritization 
+              <Search className='h-12 w-12 text-[#47e6b5]' />
+              <h3 className='font-lexend text-xl font-bold'>
+                AI Prioritization
               </h3>
-              <p className="text-muted-foreground">
-                Analyzes post content and sorts results based on relevance to your intentions.
-            
+              <p className='text-muted-foreground'>
+                Analyzes post content and sorts results based on relevance to
+                your intentions.
               </p>
             </Card>
-            <Card className="p-6 space-y-4 relative">
-              <div className="absolute top-4 right-4 bg-[#47e6b5] px-2 py-1 rounded-md text-white text-sm font-bold">
+            <Card className='p-6 space-y-4 relative'>
+              <div className='absolute top-4 right-4 bg-[#47e6b5] px-2 py-1 rounded-md text-white text-sm font-bold'>
                 Coming Soon
               </div>
-              <Zap className="h-12 w-12 text-[#47e6b5]" />
-              <h3 className="font-lexend text-xl font-bold">
+              <Zap className='h-12 w-12 text-[#47e6b5]' />
+              <h3 className='font-lexend text-xl font-bold'>
                 Integrated Outreach Assistant
               </h3>
-              <p className="text-muted-foreground">
-                Analyze content and generate personalized messages that align 
+              <p className='text-muted-foreground'>
+                Analyze content and generate personalized messages that align
                 with context, provide value, and subtely promote your offering.
               </p>
             </Card>
-            <Card className="p-6 space-y-4">
-              <MessageSquare className="h-12 w-12 text-[#47e6b5]" />
-              <h3 className="font-lexend text-xl font-bold">
+            <Card className='p-6 space-y-4'>
+              <MessageSquare className='h-12 w-12 text-[#47e6b5]' />
+              <h3 className='font-lexend text-xl font-bold'>
                 Smart Monitoring
               </h3>
-              <p className="text-muted-foreground">
-                Set up alerts based on keywords and receive
-                notifications about relevant conversations.
+              <p className='text-muted-foreground'>
+                Set up alerts based on keywords and receive notifications about
+                relevant conversations.
               </p>
             </Card>
           </div>
@@ -133,10 +130,10 @@ Find the people that want your shit.
               Ready to Scale Your Influence?
             </h2>
             <p className='text-xl text-muted-foreground'>
-             (There's a FREE VERSION)
+              (There&apos;s a FREE VERSION)
             </p>
             <Button size='lg' className='mt-8' asChild>
-              <Link href='/get-started'>
+              <Link href='/auth/signup'>
                 Get Started Now <ArrowRight className='ml-2 h-4 w-4' />
               </Link>
             </Button>
