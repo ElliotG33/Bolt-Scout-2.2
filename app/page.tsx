@@ -1,11 +1,25 @@
+'use client';
+
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowRight, Search, Zap, MessageSquare, BarChart } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
 
+import { toast } from '@/hooks/use-toast';
+import { ArrowRight, Search, Zap, MessageSquare, BarChart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 
 export default function Home() {
+  const searchParams = useSearchParams();
+  // Access the parameter value
+  const subscription = searchParams.get('subscription') || '';
+  if (subscription === 'success') {
+    toast({
+      title: 'Subscription Successful.',
+      variant: 'default',
+    });
+  }
+
   return (
     <>
       {/* Hero Section */}
@@ -19,66 +33,25 @@ export default function Home() {
               </span>
             </h1>
             <p className='text-xl text-muted-foreground'>
-              Discover and engage in relevant online discussions across social
-              media platforms with AI-powered precision.
+Find the people that want your shit.
             </p>
             <div className='flex flex-col sm:flex-row items-center justify-center gap-4'>
-              <Button size='lg' asChild>
-                <Link href='/get-started'>
-                  Get Started <ArrowRight className='ml-2 h-4 w-4' />
-                </Link>
-              </Button>
-              <Button size='lg' variant='outline' asChild>
-                <Link href='#how-it-works'>Watch Demo</Link>
-              </Button>
+              <iframe
+                width="560"
+                height="315"
+                src="https://www.youtube.com/watch?v=ZLhZQTu5pWU"
+                title="YouTube video player"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+              ></iframe>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section id='features' className='py-20 bg-muted/50'>
-        <div className='container'>
-          <h2 className='font-lexend text-3xl md:text-4xl font-bold text-center mb-16'>
-            Key Features
-          </h2>
-          <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-8'>
-            <Card className='p-6 space-y-4'>
-              <Search className='h-12 w-12 text-[#47e6b5]' />
-              <h3 className='font-lexend text-xl font-bold'>
-                Hundreds of Platforms
-              </h3>
-              <p className='text-muted-foreground'>
-                Access user-curated collection of platforms and online
-                communities, recommended for promoting your product or service.
-              </p>
-            </Card>
-            <Card className='p-6 space-y-4'>
-              <Zap className='h-12 w-12 text-[#47e6b5]' />
-              <h3 className='font-lexend text-xl font-bold'>
-                Integrated AI Outreach
-              </h3>
-              <p className='text-muted-foreground'>
-                Analyze content and craft personalized messages that resonate
-                with conversation context and tone.
-              </p>
-            </Card>
-            <Card className='p-6 space-y-4'>
-              <MessageSquare className='h-12 w-12 text-[#47e6b5]' />
-              <h3 className='font-lexend text-xl font-bold'>
-                Smart Monitoring
-              </h3>
-              <p className='text-muted-foreground'>
-                Set up alerts based on keywords and receive immediate
-                notifications about relevant conversations.
-              </p>
-            </Card>
-          </div>
-        </div>
-      </section>
-
       {/* How it Works Section */}
-      <section id='how-it-works' className='py-20'>
+      <section id='how-it-works' className='py-20 bg-muted/50'>
         <div className='container'>
           <div className='max-w-3xl mx-auto text-center space-y-8'>
             <h2 className='font-lexend text-3xl md:text-4xl font-bold'>
@@ -89,42 +62,78 @@ export default function Home() {
               various social media platforms, enabling businesses to organically
               integrate their offerings into these conversations.
             </p>
-            <div className='grid md:grid-cols-2 gap-8 mt-12'>
-              <div className='space-y-4'>
-                <BarChart className='h-12 w-12 text-[#47e6b5] mx-auto' />
-                <h3 className='font-lexend text-xl font-bold'>
-                  Input & Analysis
-                </h3>
-                <p className='text-muted-foreground'>
-                  Simply input keywords related to your business offering and
-                  your intention. Scout AI crawls platforms and sorts posts
-                  based on relevance.
-                </p>
-              </div>
-              <div className='space-y-4'>
-                <MessageSquare className='h-12 w-12 text-[#47e6b5] mx-auto' />
-                <h3 className='font-lexend text-xl font-bold'>Engagement</h3>
-                <p className='text-muted-foreground'>
-                  Our AI helps craft personalized responses that naturally fit
-                  into conversations, maintaining authenticity while scaling
-                  your reach.
-                </p>
-              </div>
-            </div>
           </div>
         </div>
       </section>
 
+
+      {/* Why it Works Section */}
+      <section id='why-it-works' className='py-20'>
+        <div className='container'>
+          <div className='max-w-3xl mx-auto text-center space-y-8'>
+            <h2 className='font-lexend text-3xl md:text-4xl font-bold'>
+              Why it Works
+            </h2>
+            <p className='text-xl text-muted-foreground'>
+              In an age where consumers are increasingly skeptical of paid ads and sponsored content, the authenticity of organic discussion stands out. Think about how often we scroll past sponsored links on Google to click a five-year-old Reddit thread, or trust YouTube comments over the product review video itself. Be the solution people naturally discover in these moments.
+            </p>
+          </div>
+        </div>
+      </section>
+      <section id="features" className="py-20 bg-muted/50">
+        <div className="container">
+          <h2 className="font-lexend text-3xl md:text-4xl font-bold text-center mb-16">
+            Key Features
+          </h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <Card className="p-6 space-y-4 relative">
+              <div className="absolute top-4 right-4 bg-[#47e6b5] px-2 py-1 rounded-md text-white text-sm font-bold">
+                Coming Soon
+              </div>
+              <Search className="h-12 w-12 text-[#47e6b5]" />
+              <h3 className="font-lexend text-xl font-bold">
+                AI Prioritization 
+              </h3>
+              <p className="text-muted-foreground">
+                Analyzes post content and sorts results based on relevance to your intentions.
+            
+              </p>
+            </Card>
+            <Card className="p-6 space-y-4 relative">
+              <div className="absolute top-4 right-4 bg-[#47e6b5] px-2 py-1 rounded-md text-white text-sm font-bold">
+                Coming Soon
+              </div>
+              <Zap className="h-12 w-12 text-[#47e6b5]" />
+              <h3 className="font-lexend text-xl font-bold">
+                Integrated Outreach Assistant
+              </h3>
+              <p className="text-muted-foreground">
+                Analyze content and generate personalized messages that align 
+                with context, provide value, and subtely promote your offering.
+              </p>
+            </Card>
+            <Card className="p-6 space-y-4">
+              <MessageSquare className="h-12 w-12 text-[#47e6b5]" />
+              <h3 className="font-lexend text-xl font-bold">
+                Smart Monitoring
+              </h3>
+              <p className="text-muted-foreground">
+                Set up alerts based on keywords and receive
+                notifications about relevant conversations.
+              </p>
+            </Card>
+          </div>
+        </div>
+      </section>
       {/* CTA Section */}
-      <section className='py-20 bg-muted/50'>
+      <section className='py-20'>
         <div className='container'>
           <div className='max-w-2xl mx-auto text-center space-y-8'>
             <h2 className='font-lexend text-3xl md:text-4xl font-bold'>
               Ready to Scale Your Influence?
             </h2>
             <p className='text-xl text-muted-foreground'>
-              Join thousands of businesses using Scout AI to discover and engage
-              in meaningful conversations.
+             (There's a FREE VERSION)
             </p>
             <Button size='lg' className='mt-8' asChild>
               <Link href='/get-started'>

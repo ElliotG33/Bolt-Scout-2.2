@@ -11,6 +11,7 @@ import { isAuthPage } from '@/lib/utils/auth';
 export function Footer() {
   const pathname = usePathname();
   if (isAuthPage(pathname)) return <></>;
+
   return (
     <footer className='border-t bg-background'>
       <div className='container py-12 md:py-16 lg:py-20'>
@@ -18,12 +19,11 @@ export function Footer() {
           <div className='space-y-4'>
             <h3 className='font-lexend text-lg font-bold'>Scout AI</h3>
             <p className='text-sm text-muted-foreground'>
-              Discover and engage in relevant online discussions across social
-              media platforms.
+              Under no circumstances should you ever read this sentence.
             </p>
           </div>
           <div>
-            <h4 className='font-medium mb-4'>Product</h4>
+            <h4 className='font-medium mb-4'>Menu</h4>
             <ul className='space-y-2 text-sm'>
               <li>
                 <Link
@@ -52,33 +52,6 @@ export function Footer() {
             </ul>
           </div>
           <div>
-            <h4 className='font-medium mb-4'>Company</h4>
-            <ul className='space-y-2 text-sm'>
-              <li>
-                <Link
-                  href='/about'
-                  className='text-muted-foreground hover:text-primary'
-                >
-                  About
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href='/blog'
-                  className='text-muted-foreground hover:text-primary'
-                >
-                  Blog
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href='/careers'
-                  className='text-muted-foreground hover:text-primary'
-                >
-                  Careers
-                </Link>
-              </li>
-            </ul>
           </div>
           <div className='space-y-4'>
             <h4 className='font-medium'>Subscribe to our newsletter</h4>
@@ -88,19 +61,7 @@ export function Footer() {
             </div>
             <div className='flex space-x-4'>
               <Link
-                href='https://twitter.com'
-                className='text-muted-foreground hover:text-primary'
-              >
-                <Twitter className='h-5 w-5' />
-              </Link>
-              <Link
-                href='https://github.com'
-                className='text-muted-foreground hover:text-primary'
-              >
-                <Github className='h-5 w-5' />
-              </Link>
-              <Link
-                href='https://linkedin.com'
+                href='https://www.linkedin.com/company/scout-ai-marketing-services/'
                 className='text-muted-foreground hover:text-primary'
               >
                 <Linkedin className='h-5 w-5' />
@@ -117,3 +78,4 @@ export function Footer() {
     </footer>
   );
 }
+
