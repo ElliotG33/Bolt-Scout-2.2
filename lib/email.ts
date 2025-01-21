@@ -47,7 +47,7 @@ export async function sendAlertEmail(alert: Alert, results: SearchResults) {
 
   try {
     await transporter.sendMail({
-      from: process.env.SMTP_FROM,
+      from: 'info@scout-ai.org',
       to: alert.email,
       subject: `Scout AI Alert: ${totalResults} New Matching Items Found`,
       html: htmlContent,
