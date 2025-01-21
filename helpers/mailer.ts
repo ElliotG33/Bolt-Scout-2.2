@@ -27,8 +27,7 @@ export async function sendMail({ email, emailType, userId, baseUrl }: any) {
   const transport = nodemailer.createTransport({
     host: SMTP_HOST,
     port: parseInt(SMTP_PORT || '587'),
-    secure: false,
-    // service: EMAIL_SERVICE_PROVIDER,
+    secure: true,
     auth: {
       user: SMTP_USER,
       pass: SMTP_PASS,
@@ -36,7 +35,7 @@ export async function sendMail({ email, emailType, userId, baseUrl }: any) {
   });
 
   const mailOptions = {
-    from: SMTP_USER,
+    from: 'info@scout-ai.org',
     to: email,
     subject: 'Reset Password',
     html: `<p>You have requested for password reset.</p><p>Click <a href="${baseUrl}/auth/resetpassword?token=${hashedToken}">here</a> to ${
