@@ -1,3 +1,6 @@
+const PLAN_1 = process.env.PLAN_1 || '';
+const PLAN_2 = process.env.PLAN_2 || '';
+
 export const tiers = [
   {
     name: 'Starter',
@@ -9,7 +12,7 @@ export const tiers = [
       'Basic keyword tracking',
       'Reddit search only',
     ],
-    stripePriceId: 'price_1Qdx4M2fJNOk2hi4BGXQ4RP6',
+    stripePriceId: PLAN_1,
   },
   {
     name: 'Professional',
@@ -24,7 +27,7 @@ export const tiers = [
       'Priority support',
     ],
     mostPopular: true,
-    stripePriceId: 'price_1Qdx4c2fJNOk2hi4BtQiimFX',
+    stripePriceId: PLAN_2,
   },
   {
     name: 'Enterprise',
@@ -42,7 +45,7 @@ export const tiers = [
       'Custom API solutions',
       'Team collaboration tools',
     ],
-    stripePriceId: 'price_1Qdx4c2fJNOk2hi4BtQiimFX',
+    stripePriceId: '',
   },
 ];
 

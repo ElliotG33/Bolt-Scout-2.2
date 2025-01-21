@@ -1,3 +1,6 @@
+const PLAN_1 = process.env.PLAN_1;
+const PLAN_2 = process.env.PLAN_2;
+
 export const plans: Record<
   string,
   {
@@ -13,18 +16,6 @@ export const plans: Record<
     custom_alert_limit: 1,
     platform: ['reddit', 'twitter', 'youtube'],
   },
-  price_1Qdx4M2fJNOk2hi4BGXQ4RP6: {
-    price: 10,
-    search_limit: 10,
-    custom_alert_limit: 10,
-    platform: ['reddit', 'twitter', 'youtube'],
-  },
-  price_1Qdx4c2fJNOk2hi4BtQiimFX: {
-    price: 30,
-    search_limit: 30,
-    custom_alert_limit: 30,
-    platform: ['reddit', 'twitter', 'youtube'],
-  },
   enterprise: {
     price: -1,
     search_limit: -1,
@@ -32,3 +23,21 @@ export const plans: Record<
     platform: ['reddit', 'twitter', 'youtube'],
   },
 };
+
+if (PLAN_1) {
+  plans[PLAN_1] = {
+    price: 10,
+    search_limit: 10,
+    custom_alert_limit: 10,
+    platform: ['reddit', 'twitter', 'youtube'],
+  };
+}
+
+if (PLAN_2) {
+  plans[PLAN_2] = {
+    price: 30,
+    search_limit: 30,
+    custom_alert_limit: 30,
+    platform: ['reddit', 'twitter', 'youtube'],
+  };
+}
