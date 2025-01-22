@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react';
-import { loadScript } from '@/lib/utils/loadScript';
 
 interface HorizontalBannerProps {
   slot?: string;
@@ -13,17 +12,8 @@ export default function HorizontalBanner({
   const isAdInitialized = useRef(false);
 
   useEffect(() => {
-    // Load the Google AdSense script dynamically
-    loadScript(
-      `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${GOOGLE_AD_CLIENT_ID}`,
-      () => {
-        // Initialize ads only if they haven't been initialized yet
-        if (!isAdInitialized.current) {
-          (window.adsbygoogle = window.adsbygoogle || []).push({});
-          isAdInitialized.current = true;
-        }
-      }
-    );
+    // Initialize ads
+    (window.adsbygoogle = window.adsbygoogle || []).push({});
   }, []);
 
   return (

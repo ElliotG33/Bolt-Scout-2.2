@@ -1,5 +1,6 @@
 import './globals.css';
 import { Inter, Lexend } from 'next/font/google';
+import Script from 'next/script';
 import AuthProvider from '@/providers/AuthProvider';
 
 import { ThemeProvider } from '@/components/theme-provider';
@@ -46,6 +47,11 @@ export default function RootLayout({
             <Toaster />
           </ThemeProvider>
         </AuthProvider>
+        <Script
+          src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9770704114610149'
+          strategy='afterInteractive'
+          crossOrigin='anonymous'
+        />
       </body>
     </html>
   );
