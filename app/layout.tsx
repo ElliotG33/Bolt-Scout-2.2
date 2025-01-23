@@ -7,7 +7,6 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
 import { Toaster } from '@/components/ui/toaster';
-import Head from 'next/head';
 // import { Toaster } from '@/components/ui/sonner';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
@@ -26,13 +25,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang='en' suppressHydrationWarning>
-      <Head>
-        <script
-          async
-          src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'
-          crossOrigin='anonymous'
-        ></script>
-      </Head>
       <body className={`${inter.variable} ${lexend.variable} font-sans`}>
         <AuthProvider>
           <ThemeProvider

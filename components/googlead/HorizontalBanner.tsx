@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useRef } from 'react';
 
 interface HorizontalBannerProps {
@@ -12,8 +14,11 @@ export default function HorizontalBanner({
   const isAdInitialized = useRef(false);
 
   useEffect(() => {
-    // Initialize ads
-    (window.adsbygoogle = window.adsbygoogle || []).push({});
+    if (!isAdInitialized.current) {
+      // Initialize ads only if they haven't been initialized yet
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+      isAdInitialized.current = true;
+    }
   }, []);
 
   return (
