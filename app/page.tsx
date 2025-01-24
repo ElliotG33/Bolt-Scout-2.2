@@ -1,27 +1,18 @@
 'use client';
 
+import { Suspense, useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 
 import YoutubeIframe from '@/components/YoutubeIframe';
 
 import { toast } from '@/hooks/use-toast';
-import { ArrowRight, Search, Zap, MessageSquare, BarChart } from 'lucide-react';
+import { ArrowRight, Search, Zap, MessageSquare } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import HorizontalBanner from '@/components/googlead/HorizontalBanner';
 
 export default function Home() {
-  const searchParams = useSearchParams();
-  // Access the parameter value
-  const subscription = searchParams.get('subscription') || '';
-  if (subscription === 'success') {
-    toast({
-      title: 'Subscription Successful.',
-      variant: 'default',
-    });
-  }
-
   return (
     <>
       {/* Hero Section */}
@@ -138,9 +129,31 @@ export default function Home() {
                 Get Started Now <ArrowRight className='ml-2 h-4 w-4' />
               </Link>
             </Button>
+
+            <HorizontalBanner />
           </div>
         </div>
       </section>
+      <Suspense fallback={null}>
+        <SubscriptionHandler />
+      </Suspense>
     </>
   );
+}
+
+// Extract the logic that uses useSearchParams into a separate component
+function SubscriptionHandler() {
+  const searchParams = useSearchParams();
+  const subscription = searchParams.get('subscription') || '';
+
+  useEffect(() => {
+    if (subscription === 'success') {
+      toast({
+        title: 'Subscription Successful.',
+        variant: 'default',
+      });
+    }
+  }, [subscription]);
+
+  return null; // This component doesn't render anything
 }
