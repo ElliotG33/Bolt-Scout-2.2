@@ -1,16 +1,47 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
+
+import axios from 'axios';
 import { Github, Twitter, Linkedin } from 'lucide-react';
 
+import { toast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { usePathname } from 'next/navigation';
 import { isAuthPage } from '@/lib/utils/auth';
 
 export function Footer() {
+  const [email, setEmail] = useState('');
   const pathname = usePathname();
   if (isAuthPage(pathname)) return <></>;
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      const response = await axios.post('/api/subscribe', { email });
+      if (response.status === 200) {
+        toast({
+          title: "You're subscribed! Thanks for joining.",
+          variant: 'default',
+        });
+        setEmail('');
+      } else {
+        toast({
+          title: 'Subscription failed. Please try again.',
+          variant: 'default',
+        });
+      }
+    } catch (error) {
+      console.error('Subscription error:', error);
+      toast({
+        title: 'An error occurred. Please try again.',
+        variant: 'default',
+      });
+    }
+  };
 
   return (
     <footer className='border-t bg-background'>
@@ -51,14 +82,21 @@ export function Footer() {
               </li>
             </ul>
           </div>
-          <div>
-          </div>
+          <div></div>
           <div className='space-y-4'>
-            <h4 className='font-medium'>Subscribe to our newsletter</h4>
-            <div className='flex space-x-2'>
-              <Input placeholder='Enter your email' type='email' />
-              <Button>Subscribe</Button>
-            </div>
+            <form onSubmit={handleSubmit}>
+              <h4 className='font-medium'>Subscribe to our newsletter</h4>
+              <div className='flex space-x-2'>
+                <Input
+                  placeholder='Enter your email'
+                  type='email'
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+                <Button>Subscribe</Button>
+              </div>
+            </form>
             <div className='flex space-x-4'>
               <Link
                 href='https://www.linkedin.com/company/scout-ai-marketing-services/'
@@ -78,4 +116,3 @@ export function Footer() {
     </footer>
   );
 }
-
