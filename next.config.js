@@ -1,6 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // output: 'export',
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -9,7 +8,10 @@ const nextConfig = {
     NEXT_PUBLIC_YOUTUBE_API_KEY: process.env.YOUTUBE_API_KEY,
   },
   experimental: {
-    serverActions: true,
+    serverActions: {
+      // Add any specific server actions configuration here
+      enabled: true, // Enable server actions
+    },
   },
 };
 

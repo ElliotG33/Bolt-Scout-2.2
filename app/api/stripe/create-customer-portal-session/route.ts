@@ -5,7 +5,7 @@ import User from '@/models/User';
 import mongoose from 'mongoose';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: NextRequest): Promise<NextResponse> {
   if (req.method === 'POST') {
     try {
       await connectToDatabase();

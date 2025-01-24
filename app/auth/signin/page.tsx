@@ -5,7 +5,7 @@ import React, { useEffect } from 'react';
 import Image from 'next/image';
 import { signIn, useSession } from 'next-auth/react';
 
-import { redirect, useSearchParams } from 'next/navigation';
+import { redirect } from 'next/navigation';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
@@ -18,8 +18,6 @@ export default function SigninPage() {
     redirect('/');
   }
 
-  const searchParams = useSearchParams();
-  const callBackUrl = searchParams.get('callbackUrl');
   const [user, setUser] = React.useState({
     email: '',
     password: '',
