@@ -143,7 +143,13 @@ export function Header() {
                   </Link>
                 ))}
                 <Button variant='ghost' asChild className='justify-start px-2'>
-                  <Link href='/signin'>Sign In</Link>
+                  {session ? (
+                    <Link href='#' onClick={() => signOut()}>
+                      Sign Out
+                    </Link>
+                  ) : (
+                    <Link href='/auth/signin'>Sign In</Link>
+                  )}
                 </Button>
                 <Button asChild className='justify-start'>
                   <Link href='/get-started'>Get Started</Link>
