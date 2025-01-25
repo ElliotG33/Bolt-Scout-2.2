@@ -16,6 +16,8 @@ export const metadata = {
   title: 'Scout AI - The Power of Scalable Micro Influence',
   description:
     'Scout AI helps businesses discover and engage in relevant online discussions across social media platforms.',
+  viewport:
+    'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no',
 };
 
 export default function RootLayout({

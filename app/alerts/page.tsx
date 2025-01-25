@@ -18,10 +18,6 @@ export default function AlertsPage() {
           data: { alerts, message },
         } = await axios.get(`/api/alerts/list`);
         setAlerts(alerts);
-        toast({
-          title: message,
-          variant: 'default',
-        });
       } catch (error: any) {
         console.log(error);
         toast({

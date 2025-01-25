@@ -7,7 +7,14 @@ import { usePathname } from 'next/navigation';
 
 import { ModeToggle } from '@/components/mode-toggle';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
+import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { Menu } from 'lucide-react';
 import { isAuthPage } from '@/lib/utils/auth';
 import axios from 'axios';
@@ -117,7 +124,7 @@ export function Header() {
               )}
             </Button>
             <Button asChild>
-              <Link href='/get-started'>Get Started</Link>
+              <Link href='/auth/signup'>Get Started</Link>
             </Button>
           </div>
 
@@ -128,32 +135,56 @@ export function Header() {
               </Button>
             </SheetTrigger>
             <SheetContent>
+              <VisuallyHidden asChild>
+                <SheetTitle>Mobile Menu</SheetTitle>
+              </VisuallyHidden>
               <div className='flex flex-col space-y-4 mt-8'>
                 {navigation.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={`text-sm ${
-                      isActive(item.href)
-                        ? 'text-primary font-medium'
-                        : 'text-muted-foreground hover:text-primary'
-                    }`}
-                  >
-                    {item.name}
-                  </Link>
-                ))}
-                <Button variant='ghost' asChild className='justify-start px-2'>
-                  {session ? (
-                    <Link href='#' onClick={() => signOut()}>
-                      Sign Out
+                  <SheetClose asChild key={item.href}>
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className={`text-sm ${
+                        isActive(item.href)
+                          ? 'text-primary font-medium'
+                          : 'text-muted-foreground hover:text-primary'
+                      }`}
+                    >
+                      {item.name}
                     </Link>
-                  ) : (
-                    <Link href='/auth/signin'>Sign In</Link>
-                  )}
+                  </SheetClose>
+                ))}
+                <Button variant='ghost' asChild className='justify-start'>
+                  <SheetClose asChild>
+                    {session ? (
+                      <Link
+                        href='#'
+                        onClick={() => signOut()}
+                        className='text-sm text-muted-foreground hover:text-primary'
+                      >
+                        Sign Out
+                      </Link>
+                    ) : (
+                      <Link
+                        href='/auth/signin'
+                        className={`text-sm ${
+                          isActive('/auth/signin')
+                            ? 'text-primary font-medium'
+                            : 'text-muted-foreground hover:text-primary'
+                        }`}
+                      >
+                        Sign In
+                      </Link>
+                    )}
+                  </SheetClose>
                 </Button>
-                <Button asChild className='justify-start'>
-                  <Link href='/get-started'>Get Started</Link>
-                </Button>
+                {!session && (
+                  <Button asChild className='justify-start'>
+                    <SheetClose asChild>
+                      <Link href='/auth/signup'>Get Started</Link>
+                    </SheetClose>
+                  </Button>
+                )}
               </div>
             </SheetContent>
           </Sheet>
