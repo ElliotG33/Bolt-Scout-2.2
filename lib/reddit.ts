@@ -1,5 +1,6 @@
 import { RedditPost, TimeFrame } from '@/types/search';
 // import data from './api/data/reddit.json';
+
 interface RedditSearchProps {
   query: string;
   timeFrame: TimeFrame;
@@ -28,14 +29,13 @@ export async function searchReddit({
         ? 'month'
         : 'year';
 
-    const url = `https://www.reddit.com/search.json?q=${encodeURIComponent(
-      query
-    )}&sort=new&t=${t}&limit=${limit}`;
-    const response = await fetch(url, {
-      headers: {
-        'User-Agent': 'Scout-AI/1.0',
-      },
+    const params = new URLSearchParams({
+      query,
+      sort: 'new',
+      t,
+      limit: String(limit),
     });
+    const response = await fetch(`/api/reddit?${params}`);
 
     if (!response.ok) {
       console.error('Reddit API Error:', response.statusText);
@@ -43,12 +43,12 @@ export async function searchReddit({
     }
 
     const data = await response.json();
-
-    if (!data.data?.children) {
+    if (data.length === 0) {
+      console.warn('No reddit posts found');
       return [];
     }
 
-    return data.data.children
+    return data
       .map((post: any) => ({
         title: post.data.title || '',
         content: post.data.selftext || '',
@@ -59,6 +59,8 @@ export async function searchReddit({
         numComments: post.data.num_comments || 0,
       }))
       .filter((post: any) => {
+        if (!antiKeywords?.length) return true; // Skip filtering if no antiKeywords
+
         const title = post.title.toLowerCase();
         const content = post.content.toLowerCase();
         return !antiKeywords.some((keyword) => {

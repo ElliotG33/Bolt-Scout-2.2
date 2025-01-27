@@ -1,8 +1,5 @@
 import { TimeFrame, YouTubeVideo } from '@/types/search';
-import { calculateStartTime } from './utils/search';
 // import data from './api/data/youtube.json';
-
-const YOUTUBE_API_URL = 'https://www.googleapis.com/youtube/v3/search';
 
 interface YoutubeSearchProps {
   query: string;
@@ -17,44 +14,26 @@ export async function searchYouTube({
   timeFrame,
   antiKeywords,
 }: YoutubeSearchProps): Promise<YouTubeVideo[]> {
-  const API_KEY = process.env.NEXT_PUBLIC_YOUTUBE_API_KEY;
-
-  if (!API_KEY) {
-    console.error('YouTube API key not configured');
-    return [];
-  }
-
   try {
-    const startTime = calculateStartTime(timeFrame);
     const params = new URLSearchParams({
-      part: 'snippet',
-      q: query,
-      maxResults: limit.toString(),
-      key: API_KEY,
-      type: 'video',
-      order: 'date',
-      safeSearch: 'moderate',
-      ...(startTime && { publishedAfter: startTime }),
+      query,
+      timeFrame,
+      limit: String(limit),
     });
-
-    const response = await fetch(`${YOUTUBE_API_URL}?${params}`);
+    const response = await fetch(`/api/youtube?${params}`);
 
     if (!response.ok) {
-      const errorData = await response.json();
-      console.error(
-        `YouTube API Error: ${errorData.error?.message || response.statusText}`
-      );
+      console.error('Reddit API Error:', response.statusText);
       return [];
     }
 
     const data = await response.json();
-
-    if (!data.items) {
-      console.warn('No YouTube results found');
+    if (data.length === 0) {
+      console.warn('No youtube posts found');
       return [];
     }
 
-    return data.items
+    return data
       .map((post: any) => ({
         id: post.id.videoId,
         title: post.snippet.title || '',
@@ -69,6 +48,8 @@ export async function searchYouTube({
         publishedAt: post.snippet.publishedAt,
       }))
       .filter((post: any) => {
+        if (!antiKeywords?.length) return true; // Skip filtering if no antiKeywords
+
         const title = post.title.toLowerCase();
         const content = post.description.toLowerCase();
         return !antiKeywords.some((keyword) => {

@@ -50,6 +50,8 @@ export async function searchTwitter({
         ...post.public_metrics,
       }))
       .filter((post: any) => {
+        if (!antiKeywords?.length) return true; // Skip filtering if no antiKeywords
+
         const content = post.text.toLowerCase();
         return !antiKeywords.some((keyword) => {
           const iKeyword = keyword.toLowerCase();
