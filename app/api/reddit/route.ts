@@ -29,9 +29,7 @@ export async function GET(request: Request) {
     )}&sort=new&t=${t}&limit=${limit}`;
     const response = await fetch(url, {
       headers: {
-        'User-Agent': 'Scout-AI/1.0',
-        'Origin': 'https://scout-ai.org',
-        'Referer': 'https://scout-ai.org',
+        'User-Agent': 'web:Scout-AI:v1.0 (by /u/MetaKnowing)',
       },
     });
 
