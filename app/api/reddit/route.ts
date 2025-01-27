@@ -30,11 +30,13 @@ export async function GET(request: Request) {
     const response = await fetch(url, {
       headers: {
         'User-Agent': 'Scout-AI/1.0',
+        'Origin': 'https://scout-ai.org',
+        'Referer': 'https://scout-ai.org',
       },
     });
 
     if (!response.ok) {
-      console.error('Reddit API Error:', response.statusText);
+      console.error('Reddit API Error:', response.statusText, response);
       return NextResponse.json(
         { error: 'Failed to fetch reddit posts.' },
         { status: response.status }
