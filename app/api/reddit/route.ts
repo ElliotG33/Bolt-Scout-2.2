@@ -35,7 +35,10 @@ export async function GET(request: Request) {
 
     if (!response.ok) {
       console.error('Reddit API Error:', response.statusText);
-      return [];
+      return NextResponse.json(
+        { error: 'Failed to fetch reddit posts.' },
+        { status: response.status }
+      );
     }
 
     const data = await response.json();

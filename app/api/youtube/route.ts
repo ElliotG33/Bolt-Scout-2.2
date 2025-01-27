@@ -39,7 +39,10 @@ export async function GET(request: Request) {
     const response = await fetch(`${YOUTUBE_API_URL}?${params}`);
     if (!response.ok) {
       console.error('YouTube API Error:', response.statusText);
-      return [];
+      return NextResponse.json(
+        { error: 'Failed to fetch youtube posts.' },
+        { status: response.status }
+      );
     }
 
     const data = await response.json();
