@@ -39,7 +39,7 @@ export function SearchResults({
       </h2>
 
       <Tabs defaultValue='reddit' className='space-y-4'>
-        <TabsList className='grid w-full grid-cols-4'>
+        <TabsList className='grid w-full grid-cols-3'>
           <TabsTrigger value='reddit' className='space-x-2'>
             <MessageSquare className='h-4 w-4' />
             <span>Reddit ({reddit.length})</span>
