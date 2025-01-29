@@ -113,6 +113,7 @@ export default function AlertResults() {
       {hasResult && (
         <SearchResults
           {...results}
+          isPaidPlan={false}
           title={
             <>
               <p>Alerts based on your keywords.</p>
