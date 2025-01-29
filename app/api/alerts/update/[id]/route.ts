@@ -5,11 +5,11 @@ import type { AlertParams } from '@/types/alerts';
 
 export async function PUT(
   request: Request,
-  { params }: { params: AlertParams }
+  { params }: { params: Promise<AlertParams> }
 ): Promise<NextResponse> {
   try {
     await connectToDatabase();
-    const { id } = params;
+    const { id } = await params;
     const alert = await Alert.findById(id);
     if (!alert) {
       return NextResponse.json(

@@ -5,11 +5,11 @@ import type { AlertParams } from '@/types/alerts';
 
 export async function DELETE(
   request: Request,
-  { params }: { params: AlertParams }
-) {
+  { params }: { params: Promise<AlertParams> }
+): Promise<NextResponse> {
   try {
     await connectToDatabase();
-    const { id } = params;
+    const { id } = await params;
     const result = await Alert.findByIdAndDelete(id);
     if (!result) {
       return NextResponse.json(
