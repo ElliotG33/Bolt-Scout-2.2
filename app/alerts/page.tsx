@@ -54,7 +54,7 @@ export default function AlertsPage() {
 
   const handleToggleAlert = async (id: string) => {
     try {
-      const data = await axios.post(`/api/alerts/update?id=${id}`, alert);
+      const data = await axios.put(`/api/alerts/update/${id}`, alert);
       toast({
         title: data.data.message,
         variant: 'default',
@@ -75,7 +75,7 @@ export default function AlertsPage() {
 
   const handleDeleteAlert = async (id: string) => {
     try {
-      const data = await axios.delete(`/api/alerts/delete?id=${id}`);
+      const data = await axios.delete(`/api/alerts/delete/${id}`);
       toast({
         title: data.data.message,
         variant: 'default',

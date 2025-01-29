@@ -8,3 +8,7 @@ export interface Alert {
   createdAt: string;
   lastRun?: string;
 }
+
+export interface AlertParams {
+  id: string;
+}

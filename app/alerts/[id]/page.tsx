@@ -27,7 +27,7 @@ export default function AlertResults() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await axios.get(`/api/alerts/get?id=${id}`);
+        const result = await axios.get(`/api/alerts/${id}`);
         const alert = result.data?.alert;
         if (!alert) {
           return;

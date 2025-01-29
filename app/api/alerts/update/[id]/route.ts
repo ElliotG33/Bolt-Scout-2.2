@@ -1,10 +1,9 @@
 import { NextResponse } from 'next/server';
 import { connectToDatabase } from '@/lib/utils/mongodb';
 import Alert from '@/models/Alert';
-import Subscription from '@/models/Subscription';
 import type { AlertParams } from '@/types/alerts';
 
-export async function GET(
+export async function PUT(
   request: Request,
   { params }: { params: AlertParams }
 ) {
@@ -22,17 +21,13 @@ export async function GET(
       );
     }
 
-    const subscription = await Subscription.exists({
-      userId: alert.userId,
-      status: 'active',
-    });
-
+    alert.active = !alert.active;
+    await alert.save();
     return NextResponse.json(
       {
-        message: 'Success.',
+        message: 'Success',
         success: true,
         alert,
-        isPaidPlan: subscription ? true : false,
       },
       { status: 200 }
     );

@@ -1,18 +1,17 @@
 import { NextResponse } from 'next/server';
 import { connectToDatabase } from '@/lib/utils/mongodb';
 import Alert from '@/models/Alert';
-import Subscription from '@/models/Subscription';
 import type { AlertParams } from '@/types/alerts';
 
-export async function GET(
+export async function DELETE(
   request: Request,
   { params }: { params: AlertParams }
 ) {
   try {
     await connectToDatabase();
     const { id } = params;
-    const alert = await Alert.findById(id);
-    if (!alert) {
+    const result = await Alert.findByIdAndDelete(id);
+    if (!result) {
       return NextResponse.json(
         {
           message: 'Alert not found',
@@ -22,17 +21,10 @@ export async function GET(
       );
     }
 
-    const subscription = await Subscription.exists({
-      userId: alert.userId,
-      status: 'active',
-    });
-
     return NextResponse.json(
       {
-        message: 'Success.',
+        message: 'Alert deleted successfully.',
         success: true,
-        alert,
-        isPaidPlan: subscription ? true : false,
       },
       { status: 200 }
     );
