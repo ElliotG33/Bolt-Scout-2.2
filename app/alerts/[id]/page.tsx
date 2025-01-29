@@ -22,6 +22,7 @@ export default function AlertResults() {
   const isValidId = useRef(false);
   const keywords = useRef<string[]>([]);
   const antiKeywords = useRef<string[]>([]);
+  const isPaidPlan = useRef(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,22 +33,31 @@ export default function AlertResults() {
           return;
         }
 
+        isPaidPlan.current = result.data.isPaidPlan;
+
         isValidId.current = true;
         keywords.current = alert.keywords;
-        // antiKeywords.current = alert.antiKeywords;
 
         const timeFrame = 'week';
         const limit = 50;
         const query = alert.keywords.join(' OR ');
 
-        const [redditResults, youtubeResults, twitterResults] =
-          await Promise.allSettled([
-            searchReddit({
-              query,
-              timeFrame,
-              limit,
-              antiKeywords: antiKeywords.current,
-            }),
+        // Array to hold the promises
+        const promises: Promise<any>[] = [];
+
+        // Always include searchReddit
+        promises.push(
+          searchReddit({
+            query,
+            timeFrame,
+            limit,
+            antiKeywords: antiKeywords.current,
+          })
+        );
+
+        // Add searchYouTube and searchTwitter if paid plan
+        if (isPaidPlan) {
+          promises.push(
             searchYouTube({
               query,
               timeFrame,
@@ -59,21 +69,37 @@ export default function AlertResults() {
               timeFrame,
               limit,
               antiKeywords: antiKeywords.current,
-            }),
-          ]);
+            })
+          );
+        }
 
+        // Execute all promises
+        const settledResults = await Promise.allSettled(promises);
+
+        // Extract data from settled promises
         const redditData =
-          redditResults.status === 'fulfilled' ? redditResults.value : [];
-        const youtubeData =
-          youtubeResults.status === 'fulfilled' ? youtubeResults.value : [];
-        const twitterData =
-          twitterResults.status === 'fulfilled' ? twitterResults.value : [];
+          settledResults[0].status === 'fulfilled'
+            ? settledResults[0].value
+            : [];
 
+        const youtubeData = isPaidPlan
+          ? settledResults[1].status === 'fulfilled'
+            ? settledResults[1].value
+            : []
+          : [];
+
+        const twitterData = isPaidPlan
+          ? settledResults[2].status === 'fulfilled'
+            ? settledResults[2].value
+            : []
+          : [];
+
+        // Update state
         setResults({
-          ...results,
           reddit: redditData,
           youtube: youtubeData,
           twitter: twitterData,
+          quora: [],
         });
 
         if (
@@ -113,7 +139,7 @@ export default function AlertResults() {
       {hasResult && (
         <SearchResults
           {...results}
-          isPaidPlan={false}
+          isPaidPlan={isPaidPlan.current}
           title={
             <>
               <p>Alerts based on your keywords.</p>

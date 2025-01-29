@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectToDatabase } from '@/lib/utils/mongodb';
 import Alert from '@/models/Alert';
+import Subscription from '@/models/Subscription';
 
 export async function DELETE(request: NextRequest) {
   if (request.method === 'DELETE') {
@@ -53,11 +54,17 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    const subscription = await Subscription.exists({
+      userId: alert.userId,
+      status: 'active',
+    });
+
     return NextResponse.json(
       {
         message: 'Success.',
         success: true,
         alert,
+        isPaidPlan: subscription ? true : false,
       },
       { status: 200 }
     );
