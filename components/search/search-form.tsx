@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-// import { useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 
 import { Search, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -29,8 +29,6 @@ const timeFrameOptions: { value: TimeFrame; label: string }[] = [
 ];
 
 export function SearchForm({ onSubmit, isLoading }: SearchFormProps) {
-  // const { data: session } = useSession();
-
   const [keywords, setKeywords] = useState<string[]>([]);
   const [secondaryKeywords, setSecondaryKeywords] = useState<string[]>([]);
   const [antiKeywords, setAntiKeywords] = useState<string[]>([]);

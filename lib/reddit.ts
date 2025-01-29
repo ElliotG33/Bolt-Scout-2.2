@@ -15,28 +15,13 @@ export async function searchReddit({
   antiKeywords,
 }: RedditSearchProps): Promise<RedditPost[]> {
   try {
-    // Convert timeFrame to Reddit's format
-    const t =
-      timeFrame === 'all'
-        ? 'all'
-        : timeFrame === 'hour'
-        ? 'hour'
-        : timeFrame === 'day'
-        ? 'day'
-        : timeFrame === 'week'
-        ? 'week'
-        : timeFrame === 'month'
-        ? 'month'
-        : 'year';
-
     const params = new URLSearchParams({
       query,
-      sort: 'new',
-      t,
-      limit: String(limit),
+      timeFrame,
+      limit: limit.toString(),
     });
-    const response = await fetch(`/api/reddit?${params}`);
 
+    const response = await fetch(`/api/reddit?${params}`);
     if (!response.ok) {
       console.error('Reddit API Error:', response.statusText);
       return [];

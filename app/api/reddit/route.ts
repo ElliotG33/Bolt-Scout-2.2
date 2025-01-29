@@ -1,10 +1,12 @@
 import { NextResponse } from 'next/server';
 
+const REDDIT_API = process.env.REDDIT_API;
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const query = searchParams.get('query');
   const timeFrame = searchParams.get('timeFrame') || 'all';
-  const limit = searchParams.get('limit') || 50;
+  const limit = searchParams.get('limit') || '50';
 
   if (!query) {
     return NextResponse.json({ error: 'query is missing' }, { status: 400 });
@@ -24,15 +26,13 @@ export async function GET(request: Request) {
         ? 'month'
         : 'year';
 
-    const url = `https://www.reddit.com/search.json?q=${encodeURIComponent(
-      query
-    )}&sort=new&t=${t}&limit=${limit}`;
-    const response = await fetch(url, {
-      headers: {
-        'User-Agent': 'web:Scout-AI:v1.0 (by /u/MetaKnowing)',
-      },
+    const params = new URLSearchParams({
+      q: query,
+      t,
+      limit: limit,
+      sort: 'new',
     });
-
+    const response = await fetch(`${REDDIT_API}?${params}`);
     if (!response.ok) {
       console.error('Reddit API Error:', response.statusText, response);
       return NextResponse.json(
@@ -42,8 +42,7 @@ export async function GET(request: Request) {
     }
 
     const data = await response.json();
-    const result = data.data?.children || [];
-    return NextResponse.json(result);
+    return NextResponse.json(data);
   } catch (error: any) {
     console.error(
       'Error fetching reddit posts:',

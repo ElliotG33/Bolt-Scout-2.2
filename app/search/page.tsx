@@ -14,6 +14,7 @@ import {
 } from '@/types/search';
 import { logUserSearch } from '@/lib/actions/search';
 import HorizontalBanner from '@/components/googlead/HorizontalBanner';
+import { useSession } from 'next-auth/react';
 
 export default function SearchPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -23,6 +24,9 @@ export default function SearchPage() {
     quora: [],
     twitter: [],
   });
+
+  const { data: session } = useSession();
+  const isPaidPlan = session?.subscription === true;
 
   const handleSearch = async (params: SearchParams) => {
     setIsLoading(true);
@@ -45,30 +49,52 @@ export default function SearchPage() {
         twitterQuery += ` ${secondaryKeywords.join(' OR ')}`;
       }
 
-      const [redditResults, youtubeResults, twitterResults] =
-        await Promise.allSettled([
-          searchReddit({ query, timeFrame, limit: resultCount, antiKeywords }),
+      // Array to hold the promises
+      const promises: Promise<any>[] = [];
+
+      // Always include searchReddit
+      promises.push(
+        searchReddit({ query, timeFrame, limit: resultCount, antiKeywords })
+      );
+
+      // Add searchYouTube and searchTwitter if paid plan
+      if (isPaidPlan) {
+        promises.push(
           searchYouTube({ query, timeFrame, limit: resultCount, antiKeywords }),
           searchTwitter({
             query: twitterQuery,
             timeFrame,
             limit: resultCount,
             antiKeywords,
-          }),
-        ]);
+          })
+        );
+      }
 
+      // Execute all promises
+      const settledResults = await Promise.allSettled(promises);
+
+      // Extract data from settled promises
       const redditData =
-        redditResults.status === 'fulfilled' ? redditResults.value : [];
-      const youtubeData =
-        youtubeResults.status === 'fulfilled' ? youtubeResults.value : [];
-      const twitterData =
-        twitterResults.status === 'fulfilled' ? twitterResults.value : [];
+        settledResults[0].status === 'fulfilled' ? settledResults[0].value : [];
 
+      const youtubeData = isPaidPlan
+        ? settledResults[1].status === 'fulfilled'
+          ? settledResults[1].value
+          : []
+        : [];
+
+      const twitterData = isPaidPlan
+        ? settledResults[2].status === 'fulfilled'
+          ? settledResults[2].value
+          : []
+        : [];
+
+      // Update state
       setResults({
-        ...results,
         reddit: redditData,
         youtube: youtubeData,
         twitter: twitterData,
+        quora: [],
       });
 
       if (
@@ -115,7 +141,7 @@ export default function SearchPage() {
         results.youtube.length > 0 ||
         results.twitter.length > 0) && (
         <div className='mt-8'>
-          <SearchResults {...results} />
+          <SearchResults {...results} isPaidPlan={isPaidPlan} />
 
           <HorizontalBanner />
         </div>

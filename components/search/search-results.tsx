@@ -19,6 +19,7 @@ interface SearchResultsProps {
   youtube: YouTubeVideo[];
   quora?: QuoraPost[];
   twitter: TwitterPost[];
+  isPaidPlan: boolean;
 }
 
 export function SearchResults({
@@ -27,6 +28,7 @@ export function SearchResults({
   quora,
   twitter,
   title,
+  isPaidPlan,
 }: SearchResultsProps) {
   return (
     <motion.div
@@ -44,25 +46,29 @@ export function SearchResults({
             <MessageSquare className='h-4 w-4' />
             <span>Reddit ({reddit.length})</span>
           </TabsTrigger>
-          <TabsTrigger value='youtube' className='space-x-2'>
-            <Youtube className='h-4 w-4' />
-            <span>YouTube ({youtube.length})</span>
-          </TabsTrigger>
+          {isPaidPlan && (
+            <TabsTrigger value='youtube' className='space-x-2'>
+              <Youtube className='h-4 w-4' />
+              <span>YouTube ({youtube.length})</span>
+            </TabsTrigger>
+          )}
           {/* <TabsTrigger value='quora' className='space-x-2'>
             <Share2 className='h-4 w-4' />
             <span>Quora ({quora.length})</span>
           </TabsTrigger> */}
-          <TabsTrigger value='twitter' className='space-x-2'>
-            <Twitter className='h-4 w-4' />
-            <span>X ({twitter.length})</span>
-          </TabsTrigger>
+          {isPaidPlan && (
+            <TabsTrigger value='twitter' className='space-x-2'>
+              <Twitter className='h-4 w-4' />
+              <span>X ({twitter.length})</span>
+            </TabsTrigger>
+          )}
         </TabsList>
 
         <TabsContent value='reddit' className='space-y-4'>
           <RedditSearchResult data={reddit} />
         </TabsContent>
 
-        <YoutubeSearchResult data={youtube} />
+        {isPaidPlan && <YoutubeSearchResult data={youtube} />}
 
         {/* <TabsContent value='quora' className='space-y-4'>
           <p className='text-muted-foreground text-center py-8'>
@@ -70,7 +76,7 @@ export function SearchResults({
           </p>
         </TabsContent> */}
 
-        <TwitterSearchResult data={twitter} />
+        {isPaidPlan && <TwitterSearchResult data={twitter} />}
       </Tabs>
     </motion.div>
   );
