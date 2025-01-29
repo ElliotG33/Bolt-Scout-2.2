@@ -6,7 +6,7 @@ import type { AlertParams } from '@/types/alerts';
 export async function PUT(
   request: Request,
   { params }: { params: AlertParams }
-) {
+): Promise<NextResponse> {
   try {
     await connectToDatabase();
     const { id } = params;
