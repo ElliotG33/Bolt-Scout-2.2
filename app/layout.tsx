@@ -32,6 +32,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang='en' suppressHydrationWarning>
+      <head>
+        {/* Favicon */}
+        <link rel='icon' href='/favicon.png' />
+      </head>
       <body className={`${inter.variable} ${lexend.variable} font-sans`}>
         <AuthProvider>
           <ThemeProvider
@@ -46,10 +50,29 @@ export default function RootLayout({
             <Toaster />
           </ThemeProvider>
         </AuthProvider>
-        <Script
+        {/* <Script
           src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9770704114610149'
           strategy='afterInteractive'
           crossOrigin='anonymous'
+        /> */}
+
+        {/* Google Analytics Script */}
+        <Script
+          id='gtag-script'
+          strategy='afterInteractive'
+          src='https://www.googletagmanager.com/gtag/js?id=G-FNNQBNFJG5'
+        />
+        <Script
+          id='gtag-init'
+          strategy='afterInteractive'
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-FNNQBNFJG5');
+            `,
+          }}
         />
       </body>
     </html>

@@ -10,7 +10,7 @@ import { toast } from '@/hooks/use-toast';
 import { ArrowRight, Search, Zap, MessageSquare } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import HorizontalBanner from '@/components/googlead/HorizontalBanner';
+// import HorizontalBanner from '@/components/googlead/HorizontalBanner';
 
 export default function Home() {
   return (
@@ -130,7 +130,7 @@ export default function Home() {
               </Link>
             </Button>
 
-            <HorizontalBanner />
+            {/* <HorizontalBanner /> */}
           </div>
         </div>
       </section>

@@ -4,7 +4,7 @@ import { TabsContent } from '@radix-ui/react-tabs';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { ArrowUpFromLine, ExternalLink, MessageSquare } from 'lucide-react';
-import HorizontalBanner from '../googlead/HorizontalBanner';
+// import HorizontalBanner from '../googlead/HorizontalBanner';
 
 interface RedditSearchResultProps {
   data: any;
@@ -70,7 +70,7 @@ export default function RedditSearchResult({ data }: RedditSearchResultProps) {
               </CardContent>
             </Card>
 
-            {index > 0 && index % 9 === 0 && <HorizontalBanner />}
+            {/* {index > 0 && index % 9 === 0 && <HorizontalBanner />} */}
           </motion.div>
         ))
       ) : (

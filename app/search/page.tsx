@@ -13,7 +13,7 @@ import {
   SearchResults as SearchResultsType,
 } from '@/types/search';
 import { logUserSearch } from '@/lib/actions/search';
-import HorizontalBanner from '@/components/googlead/HorizontalBanner';
+// import HorizontalBanner from '@/components/googlead/HorizontalBanner';
 import { useSession } from 'next-auth/react';
 
 export default function SearchPage() {
@@ -135,7 +135,7 @@ export default function SearchPage() {
       </div>
       <SearchForm onSubmit={handleSearch} isLoading={isLoading} />
 
-      <HorizontalBanner />
+      {/* <HorizontalBanner /> */}
 
       {(results.reddit.length > 0 ||
         results.youtube.length > 0 ||
@@ -143,7 +143,7 @@ export default function SearchPage() {
         <div className='mt-8'>
           <SearchResults {...results} isPaidPlan={isPaidPlan} />
 
-          <HorizontalBanner />
+          {/* <HorizontalBanner /> */}
         </div>
       )}
     </div>
