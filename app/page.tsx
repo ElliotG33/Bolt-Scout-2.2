@@ -26,10 +26,10 @@ export default function Home() {
               </span>
             </h1>
             <p className='text-xl text-muted-foreground'>
-              Find the people that want your shit.
+              Find the people that want your stuff.
             </p>
             <div className='flex flex-col sm:flex-row items-center justify-center gap-4'>
-              <YoutubeIframe videoId='ZLhZQTu5pWU' />
+              <YoutubeIframe videoId='-1Cb4gD7gy4' />
             </div>
           </div>
         </div>
